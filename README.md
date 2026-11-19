@@ -1,5 +1,5 @@
 
-<h1 align="center">Pokeumonia</h1>
+<h1 align="center">Pokeumoinia</h1>
 <p align="center"><em>Minha história com Pokémon.</em></p>
 <p align="center">
  <img width="3840" height="2160" alt="giraforest4k" src="https://github.com/user-attachments/assets/f29f08e8-7c5e-4da3-9bdc-ad764a91c9bf" width="100%"/>
