@@ -1,0 +1,31 @@
+/* Pokeumonia: dashboard (usa também o styles.css) */
+.dashboard-page { background-color: #0b0b0c; }
+.dash { padding: 100px 0 40px; }
+.dash h1 { font-size: 42px; margin-bottom: 6px; }
+.sub { color: var(--mudo); margin-bottom: 24px; }
+
+/* grade de cartões: 4 colunas, cartões largos ocupam 2 */
+.grade { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.span2 { grid-column: span 2; }
+.card-dash { min-width: 0; padding: 20px; background-color: #131315; border-radius: 14px; }
+.card-dash h3 { font-size: 20px; margin-bottom: 14px; color: var(--suave); }
+
+/* indicadores */
+.kpi p { font-size: 14px; color: var(--suave); }
+.kpi strong { display: block; font-family: Georgia, serif; font-size: 52px; font-weight: normal; line-height: 1.15; }
+.kpi .unidade { font-size: 22px; color: var(--mudo); }
+.kpi small { font-size: 13px; color: var(--mudo); }
+.card-tipo p, #card_tipo p, #card_tipo small { color: inherit; }
+
+/* gráficos e lista */
+.area-grafico { position: relative; height: 300px; }
+.historico { list-style: none; }
+.item { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #26262a; }
+.item span { color: var(--mudo); font-size: 14px; }
+.resumo { margin-top: 12px; color: var(--suave); font-size: 14px; }
+
+@media (max-width: 800px) {
+  .grade { grid-template-columns: 1fr; }
+  .span2 { grid-column: auto; }
+  .dash h1 { font-size: 32px; }
+}
