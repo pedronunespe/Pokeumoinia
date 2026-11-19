@@ -1,6 +1,8 @@
 /* Pokeumonia: estilos gerais (index, login, cadastro) */
+/* Remove margens e padding padrão e facilita o cálculo de tamanhos. */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Paleta de cores reutilizada nas folhas de estilo. */
 :root {
   --fundo: #0e0f12;
   --card: #16181d;
@@ -75,6 +77,7 @@ input:focus { outline: none; border-bottom-color: var(--texto); }
 .footer { padding: 30px 0; text-align: center; font-size: 14px; color: var(--mudo); background-color: var(--fundo); }
 
 /* celular */
+/* Ajusta os tamanhos e empilha os marcos em telas pequenas. */
 @media (max-width: 800px) {
   .capa h1 { font-size: 38px; }
   .linha::before { left: 6px; }

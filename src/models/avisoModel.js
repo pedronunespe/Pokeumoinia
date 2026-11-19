@@ -1,7 +1,10 @@
+// Módulo responsável por executar os comandos no banco de dados.
 var database = require("../database/config");
 
+// Lista os avisos junto com os dados de quem os publicou.
 function listar() {
     console.log("ACESSEI O AVISO  MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listar()");
+    // Consulta com INNER JOIN para trazer também o nome e o e-mail do usuário.
     var instrucaoSql = `
         SELECT 
             a.id AS idAviso,
@@ -20,8 +23,10 @@ function listar() {
     return database.executar(instrucaoSql);
 }
 
+// Busca avisos cuja descrição é parecida com o texto informado.
 function pesquisarDescricao(texto) {
     console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function pesquisarDescricao()");
+    // O filtro LIKE limita os resultados ao texto pesquisado.
     var instrucaoSql = `
         SELECT 
             a.id AS idAviso,
@@ -41,8 +46,10 @@ function pesquisarDescricao(texto) {
     return database.executar(instrucaoSql);
 }
 
+// Lista apenas os avisos publicados por um determinado usuário.
 function listarPorUsuario(idUsuario) {
     console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function listarPorUsuario()");
+    // O WHERE filtra os avisos pelo id do usuário.
     var instrucaoSql = `
         SELECT 
             a.id AS idAviso,
@@ -62,6 +69,7 @@ function listarPorUsuario(idUsuario) {
     return database.executar(instrucaoSql);
 }
 
+// Insere um aviso novo com título, descrição e usuário responsável.
 function publicar(titulo, descricao, idUsuario) {
     console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function publicar(): ", titulo, descricao, idUsuario);
     var instrucaoSql = `
@@ -71,6 +79,7 @@ function publicar(titulo, descricao, idUsuario) {
     return database.executar(instrucaoSql);
 }
 
+// Atualiza a descrição de um aviso já existente.
 function editar(novaDescricao, idAviso) {
     console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function editar(): ", novaDescricao, idAviso);
     var instrucaoSql = `
@@ -80,6 +89,7 @@ function editar(novaDescricao, idAviso) {
     return database.executar(instrucaoSql);
 }
 
+// Exclui um aviso do banco pelo seu id.
 function deletar(idAviso) {
     console.log("ACESSEI O AVISO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function deletar():", idAviso);
     var instrucaoSql = `
@@ -89,6 +99,7 @@ function deletar(idAviso) {
     return database.executar(instrucaoSql);
 }
 
+// Exporta as consultas usadas pelo controller de avisos.
 module.exports = {
     listar,
     listarPorUsuario,

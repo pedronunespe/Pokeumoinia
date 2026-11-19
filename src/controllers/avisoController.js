@@ -1,6 +1,9 @@
+// Model com os comandos SQL dos avisos.
 var avisoModel = require("../models/avisoModel");
 
+// Lista todos os avisos cadastrados.
 function listar(req, res) {
+    // Devolve a lista ou 204 caso não exista nenhum aviso.
     avisoModel.listar().then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
@@ -14,7 +17,9 @@ function listar(req, res) {
     });
 }
 
+// Lista somente os avisos de um usuário.
 function listarPorUsuario(req, res) {
+    // Id do usuário vem da URL.
     var idUsuario = req.params.idUsuario;
 
     avisoModel.listarPorUsuario(idUsuario)
@@ -39,6 +44,7 @@ function listarPorUsuario(req, res) {
         );
 }
 
+// Busca avisos cuja descrição contém o texto informado na URL.
 function pesquisarDescricao(req, res) {
     var descricao = req.params.descricao;
 
@@ -60,11 +66,13 @@ function pesquisarDescricao(req, res) {
         );
 }
 
+// Publica um aviso novo para o usuário indicado na URL.
 function publicar(req, res) {
     var titulo = req.body.titulo;
     var descricao = req.body.descricao;
     var idUsuario = req.params.idUsuario;
 
+    // Valida título, descrição e id do usuário antes de salvar.
     if (titulo == undefined) {
         res.status(400).send("O título está indefinido!");
     } else if (descricao == undefined) {
@@ -88,6 +96,7 @@ function publicar(req, res) {
     }
 }
 
+// Atualiza a descrição de um aviso existente.
 function editar(req, res) {
     var novaDescricao = req.body.descricao;
     var idAviso = req.params.idAviso;
@@ -108,6 +117,7 @@ function editar(req, res) {
 
 }
 
+// Remove um aviso pelo id recebido na URL.
 function deletar(req, res) {
     var idAviso = req.params.idAviso;
 
@@ -126,6 +136,7 @@ function deletar(req, res) {
         );
 }
 
+// Exporta as funções usadas pelo roteador de avisos.
 module.exports = {
     listar,
     listarPorUsuario,

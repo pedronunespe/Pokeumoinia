@@ -24,6 +24,7 @@
 .item span { color: var(--mudo); font-size: 14px; }
 .resumo { margin-top: 12px; color: var(--suave); font-size: 14px; }
 
+/* Em telas pequenas, os cards ocupam a largura toda. */
 @media (max-width: 800px) {
   .grade { grid-template-columns: 1fr; }
   .span2 { grid-column: auto; }

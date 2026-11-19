@@ -10,6 +10,7 @@
 </head>
 
 <body class="login-page">
+    <!-- Cabeçalho com o logo e os links de navegação. -->
     <div class="header">
         <div class="container">
             <a class="logo" href="index.html">Pokeumonia</a>
@@ -20,7 +21,9 @@
         </div>
     </div>
 
+    <!-- Área do formulário de login. -->
     <div class="login">
+        <!-- Mensagem de erro exibida quando o login falha. -->
         <div class="alerta_erro">
             <div class="card_erro" id="cardErro">
                 <span id="mensagem_erro"></span>
@@ -29,6 +32,7 @@
         <div class="container">
             <div class="card">
                 <h2>Olá de volta!</h2>
+                <!-- Campos de e-mail e senha e botão de entrada. -->
                 <div class="formulario">
                     <div class="campo">
                         <span>E-mail:</span>
@@ -41,6 +45,7 @@
                     <button class="botao" onclick="entrar()">Entrar</button>
                 </div>
 
+                <!-- Animação mostrada enquanto a requisição está em andamento. -->
                 <div id="div_aguardar" class="loading-div">
                     <img src="./assets/circle-loading.gif" id="loading-gif">
                 </div>
@@ -51,6 +56,7 @@
         </div>
     </div>
 
+    <!-- Rodapé com o aviso sobre o projeto. -->
     <div class="footer">
         <div class="container">
             Projeto acadêmico sem fins lucrativos. Pokémon é marca da Nintendo, Game Freak e The Pokémon Company.
@@ -61,12 +67,15 @@
 </html>
 
 <script>
+    // Envia e-mail e senha para a API e, se estiverem corretos, abre o painel.
     async function entrar() {
         aguardar();
 
+        // Lê os valores digitados nos campos do formulário.
         var emailVar = document.getElementById("email_input").value.trim();
         var senhaVar = document.getElementById("senha_input").value;
 
+        // Não continua se algum campo estiver vazio.
         if (emailVar === "" || senhaVar === "") {
             mostrarErroLogin("Preencha o e-mail e a senha.");
             finalizarAguardar();
@@ -74,6 +83,7 @@
         }
 
         try {
+            // Chama a rota de autenticação com os dados do formulário.
             var resposta = await fetch("/usuarios/autenticar", {
                 method: "POST",
                 headers: {
@@ -85,38 +95,46 @@
                 })
             });
 
+            // Credenciais inválidas retornadas pelo servidor.
             if (resposta.status === 403) {
                 mostrarErroLogin("E-mail ou senha inválidos.");
                 return false;
             }
 
+            // Qualquer outro erro impediria o login.
             if (!resposta.ok) {
                 mostrarErroLogin("Não foi possível validar o login. Confira a conexão com o servidor e o banco de dados.");
                 return false;
             }
 
+            // Login aprovado: guarda os dados do usuário no navegador.
             var usuario = await resposta.json();
             sessionStorage.setItem("EMAIL_USUARIO", usuario.email);
             sessionStorage.setItem("NOME_USUARIO", usuario.nome);
             sessionStorage.setItem("ID_USUARIO", usuario.id);
             sessionStorage.setItem("AQUARIOS", JSON.stringify(Array.isArray(usuario.aquarios) ? usuario.aquarios : []));
 
+            // Abre o painel de métricas.
             window.location = "./dashboard/dashboard.html";
         } catch (erro) {
+            // Falha de conexão com o servidor.
             mostrarErroLogin("Não foi possível conectar ao servidor. Tente novamente.");
         } finally {
+            // Sempre esconde o carregamento ao terminar.
             finalizarAguardar();
         }
 
         return false;
     }
 
+    // Mostra a mensagem de erro e a esconde depois de 5 segundos.
     function mostrarErroLogin(mensagem) {
         document.getElementById("mensagem_erro").textContent = mensagem;
         document.getElementById("cardErro").style.display = "block";
         setTimeout(sumirMensagem, 5000);
     }
 
+    // Esconde o card de erro.
     function sumirMensagem() {
         document.getElementById("cardErro").style.display = "none";
     }

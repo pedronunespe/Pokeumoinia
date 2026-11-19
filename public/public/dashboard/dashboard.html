@@ -13,6 +13,7 @@
 
 <body class="dashboard-page" onload="validarSessao()">
 
+    <!-- Cabeçalho com saudação ao usuário e opção de sair. -->
     <div class="header">
         <div class="container">
             <a class="logo" href="../index.html">Pokeumonia</a>
@@ -23,11 +24,13 @@
         </div>
     </div>
 
+    <!-- Painel com os indicadores e gráficos da jornada. -->
     <div class="dash">
         <div class="container">
             <h1>Minha jornada em números</h1>
             <p class="sub">Dados de exemplo: troque os anos, os jogos e os times no script, no fim desta página, pelos seus.</p>
 
+            <!-- Grade de cards: KPIs, gráficos e listas. -->
             <div class="grade">
                 <div class="card-dash kpi">
                     <p>Horas totais</p>
@@ -77,6 +80,7 @@
         </div>
     </div>
 
+    <!-- Rodapé com o aviso sobre o projeto. -->
     <div class="footer">
         <div class="container">
             Projeto acadêmico sem fins lucrativos. Pokémon é marca da Nintendo, Game Freak e The Pokémon Company.
@@ -132,6 +136,7 @@
         // ---------- Horas totais e nível ----------
         var totalHoras = 0;
         var maiorHora = 0;
+        // Soma todas as horas e descobre o ano com mais jogo.
         for (var i = 0; i < horasAno.length; i++) {
             totalHoras = totalHoras + horasAno[i];
             if (horasAno[i] > maiorHora) {
@@ -140,6 +145,7 @@
         }
         var anosJornada = new Date().getFullYear() - 2013;
         var nivel = '';
+        // Define o título do treinador conforme as horas jogadas.
         if (totalHoras >= 1000) {
             nivel = 'Treinador mestre';
         } else if (totalHoras >= 200) {
@@ -147,11 +153,13 @@
         } else {
             nivel = 'Treinador iniciante';
         }
+        // Atualiza os cards de horas totais e de nível.
         document.getElementById('kpi_horas').innerHTML = totalHoras + ' <span class="unidade">h</span>';
         document.getElementById('kpi_nivel').innerHTML = nivel + ' · ' + anosJornada + ' anos de jornada';
 
         // ---------- Linha do tempo (barras) ----------
         var coresBarras = [];
+        // Destaca em vermelho o ano em que mais jogou.
         for (var j = 0; j < horasAno.length; j++) {
             if (horasAno[j] == maiorHora) {
                 coresBarras.push('#ff4a33');
@@ -160,6 +168,7 @@
             }
         }
 
+        // Desenha o gráfico de barras das horas por ano.
         new Chart(document.getElementById('grafico_barras'), {
             type: 'bar',
             data: {
@@ -180,6 +189,7 @@
         // ---------- Radar e BST: média dos status de todos os times ----------
         var somaStatus = [0, 0, 0, 0, 0, 0];
         var totalPokemon = 0;
+        // Soma os status de todos os Pokémon usados nos times.
         for (var a = 0; a < jogos.length; a++) {
             for (var b = 0; b < jogos[a].time.length; b++) {
                 for (var c = 0; c < 6; c++) {
@@ -190,12 +200,14 @@
         }
         var mediaStatus = [];
         var bst = 0;
+        // Calcula a média de cada status e o BST (soma das médias).
         for (var d = 0; d < 6; d++) {
             mediaStatus.push(Math.round(somaStatus[d] / totalPokemon));
             bst = bst + mediaStatus[d];
         }
         document.getElementById('kpi_bst').innerHTML = bst;
 
+        // Desenha o gráfico de radar com a média dos status.
         new Chart(document.getElementById('grafico_radar'), {
             type: 'radar',
             data: {
@@ -229,6 +241,7 @@
         // ---------- Tipo predominante em cada jogo e tipo mais utilizado ----------
         var listaTipos = document.getElementById('lista_tipos');
         var contagemGeral = {};
+        // Conta os tipos de cada time para achar o predominante em cada jogo.
         for (var e = 0; e < jogos.length; e++) {
             var contagem = {};
             for (var f = 0; f < jogos[e].time.length; f++) {
@@ -239,6 +252,7 @@
                 }
             }
 
+            // Descobre qual tipo apareceu mais vezes no time.
             var maior = 0;
             var tipos = Object.keys(contagem);
             for (var h = 0; h < tipos.length; h++) {
@@ -247,6 +261,7 @@
                 }
             }
 
+            // Guarda todos os tipos que empataram na maior contagem.
             var predominantes = [];
             for (var k = 0; k < tipos.length; k++) {
                 if (contagem[tipos[k]] == maior) {
@@ -257,6 +272,7 @@
             listaTipos.innerHTML += '<li class="item"><strong>' + jogos[e].nome + '</strong><span>' + jogos[e].horas + ' h · ' + predominantes.join(' e ') + ' (' + maior + ' de ' + jogos[e].time.length + ')</span></li>';
         }
 
+        // Verifica qual tipo foi o mais usado em todos os times.
         var tiposGerais = Object.keys(contagemGeral);
         var tipoTop = '';
         var maiorGeral = 0;
@@ -266,6 +282,7 @@
                 tipoTop = tiposGerais[t];
             }
         }
+        // Pinta o card com a cor do tipo e ajusta o contraste do texto.
         var cardTipo = document.getElementById('card_tipo');
         cardTipo.style.backgroundColor = coresTipos[tipoTop];
         if (tiposEscuros.indexOf(tipoTop) >= 0) {
@@ -278,6 +295,7 @@
 
         // ---------- Rosca: Pokémon por geração ----------
         var porGeracao = {};
+        // Agrupa os Pokémon por geração para o gráfico de rosca.
         for (var m = 0; m < jogos.length; m++) {
             for (var n = 0; n < jogos[m].time.length; n++) {
                 var gen = 'Geração ' + jogos[m].time[n].geracao;
@@ -289,6 +307,7 @@
         var qtdGeracoes = [];
         var maiorGeracao = 0;
         var geracaoTop = '';
+        // Monta as listas do gráfico e descobre a geração mais presente.
         for (var p = 0; p < nomesGeracoes.length; p++) {
             qtdGeracoes.push(porGeracao[nomesGeracoes[p]]);
             if (porGeracao[nomesGeracoes[p]] > maiorGeracao) {
@@ -299,6 +318,7 @@
 
         var paleta = ['#c9a574', '#8a6a43', '#b9bcc6', '#6f7380', '#4a4d57'];
         var coresRosca = [];
+        // Destaca a geração favorita e pinta as demais com a paleta.
         for (var q = 0; q < nomesGeracoes.length; q++) {
             if (nomesGeracoes[q] == geracaoTop) {
                 coresRosca.push('#ff4a33');
@@ -307,9 +327,11 @@
             }
         }
 
+        // Mostra a porcentagem de Pokémon da geração com mais afinidade.
         var percentual = (maiorGeracao / totalPokemon) * 100;
         document.getElementById('afinidade').innerHTML = geracaoTop + ': ' + maiorGeracao + ' de ' + totalPokemon + ' Pokémon dos meus times (' + percentual.toFixed(0) + '%).';
 
+        // Desenha o gráfico de rosca de Pokémon por geração.
         new Chart(document.getElementById('grafico_rosca'), {
             type: 'doughnut',
             data: {
