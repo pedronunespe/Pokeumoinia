@@ -1,34 +1,38 @@
 // Módulo responsável por executar os comandos no banco de dados.
 var database = require("../database/config")
 
-// Confere se o e-mail e a senha informados existem no cadastro.
+// ALTERAÇÃO: consulta de login passou a usar apenas colunas da tabela usuario. PORQUE: fkEstabelecimento não existe no banco pokeumonia.
 function autenticar(email, senha) {
     // Os "?" evitam montar a consulta com valores diretos (parâmetros seguros).
     var instrucaoSql = `
-        SELECT idUsuario, nome, sobrenome, email, fkEstabelecimento AS estabelecimentoId
+        SELECT idUsuario, nome, sobrenome, email
         FROM usuario
         WHERE email = ? AND senha = ?;
     `;
     return database.executar(instrucaoSql, [email, senha]);
 }
 
-// Coloque os mesmos parâmetros aqui. Vá para a var instrucaoSql
-// Cadastra um novo usuário e vincula ele a um estabelecimento.
-function cadastrar(nome, sobrenome, email, senha, fkEstabelecimento) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, sobrenome, email, senha, fkEstabelecimento);
-    
-    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
-    //  e na ordem de inserção dos dados.
-    // Insere os dados do formulário na tabela usuario.
+// ALTERAÇÃO: assinatura reduzida a nome, sobrenome, email e senha. PORQUE: o vínculo com estabelecimento foi removido do cadastro.
+function cadastrar(nome, sobrenome, email, senha) {
+    // ALTERAÇÃO: logs da SQL e dos dados do formulário removidos. PORQUE: evita expor e-mail e senha no console.
+    // ALTERAÇÃO: INSERT usa placeholders "?" e parâmetros separados. PORQUE: elimina interpolação de strings na SQL.
     var instrucaoSql = `
-        INSERT INTO usuario (nome, sobrenome, email, senha, fkEstabelecimento) VALUES ('${nome}', '${sobrenome}', '${email}', '${senha}', '${fkEstabelecimento}');
+        INSERT INTO usuario (nome, sobrenome, email, senha) VALUES (?, ?, ?, ?);
     `;
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    return database.executar(instrucaoSql, [nome, sobrenome, email, senha]);
 }
 
-// Exporta as consultas usadas pelo controller de usuários.
+// ALTERAÇÃO: novo insert na tabela perfilTreinador, com anoInicio vindo do ano atual do MySQL. PORQUE: o perfil é 1:1 com o usuário e define os anos de jornada.
+function cadastrarPerfil(fkUsuario, apelido) {
+    var instrucaoSql = `
+        INSERT INTO perfilTreinador (fkUsuario, apelido, anoInicio) VALUES (?, ?, YEAR(CURDATE()));
+    `;
+    return database.executar(instrucaoSql, [fkUsuario, apelido]);
+}
+
+// ALTERAÇÃO: cadastrarPerfil exportado. PORQUE: o controller precisa criar o perfil após o cadastro do usuário.
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    cadastrarPerfil
 };

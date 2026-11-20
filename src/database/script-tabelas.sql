@@ -35,12 +35,12 @@ CREATE TABLE pokemon (
     idPokemon INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(40) NOT NULL UNIQUE,
     fkGeracao INT NOT NULL,
-    ps SMALLINT NOT NULL,
-    ataque SMALLINT NOT NULL,
-    defesa SMALLINT NOT NULL,
-    atqEsp SMALLINT NOT NULL,
-    defEsp SMALLINT NOT NULL,
-    velocidade SMALLINT NOT NULL,
+    ps INT NOT NULL,
+    ataque INT NOT NULL,
+    defesa INT NOT NULL,
+    atqEsp INT NOT NULL,
+    defEsp INT NOT NULL,
+    velocidade INT NOT NULL,
     FOREIGN KEY (fkGeracao) REFERENCES geracao (idGeracao)
 );
 
@@ -81,7 +81,7 @@ CREATE TABLE usuarioJogo (
 CREATE TABLE registroHoras (
     idRegistro INT PRIMARY KEY AUTO_INCREMENT,
     fkUsuarioJogo INT NOT NULL,
-    ano SMALLINT NOT NULL,
+    ano INT NOT NULL,
     horas DECIMAL(6,1) NOT NULL,
     UNIQUE (fkUsuarioJogo, ano),
     CHECK (horas >= 0),

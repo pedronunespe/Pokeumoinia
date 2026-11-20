@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokeumonia | Cadastro</title>
+    <script src="js/sessao.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="cadastro-page">
+    <!-- Cabeçalho com o logo e os links de navegação. -->
+    <div class="header">
+        <div class="container">
+            <a class="logo" href="index.html">Pokeumonia</a>
+            <ul class="navbar">
+                <li class="agora"><a href="cadastro.html">Cadastro</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Área do formulário de cadastro. -->
+    <div class="login">
+        <!-- Mensagem de erro ou de sucesso do cadastro. -->
+        <div class="alerta_erro">
+            <div class="card_erro" id="cardErro">
+                <span id="mensagem_erro"></span>
+            </div>
+        </div>
+        <div class="container">
+            <div class="card">
+                <h2>Crie sua conta</h2>
+                <!-- Campos pessoais, senha e botão de cadastro. -->
+                <div class="formulario">
+                    <div class="campo">
+                        <span>Nome:</span>
+                        <input id="nome_input" type="text" placeholder="Seu nome" />
+                    </div>
+                    <div class="campo">
+                        <span>Sobrenome:</span>
+                        <input id="sobrenome_input" type="text" placeholder="Sobrenome" />
+                    </div>
+                    <div class="campo">
+                        <span>E-mail:</span>
+                        <input id="email_input" type="text" placeholder="meuemail@provedor.com" />
+                    </div>
+                    <div class="campo">
+                        <span>Senha:</span>
+                        <input id="senha_input" type="password" placeholder="******" oninput="mostrarRequisitosSenha()" />
+                        <!-- Checklist atualizado a cada caractere digitado na senha. -->
+                        <div id="requisitos_senha"></div>
+                    </div>
+                    <div class="campo">
+                        <span>Confirmação da senha:</span>
+                        <input id="confirmacao_senha_input" type="password" placeholder="******" />
+                    </div>
+                    <button class="botao" onclick="cadastrar()">Cadastrar</button>
+                </div>
+                <!-- Animação mostrada enquanto a requisição está em andamento. -->
+                <div id="div_aguardar" class="loading-div">
+                    <img src="./assets/circle-loading.gif" id="loading-gif" />
+                </div>
+
+                <div id="div_erros_login"></div>
+                <p class="troca">Já tem conta? <a href="login.html">Entrar</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé com os créditos do projeto. -->
+    <div class="footer">
+        <div class="container">
+            Projeto acadêmico. Pokémon é marca da Nintendo, Game Freak e The Pokémon Company. Artista @Rival.clay
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    // ALTERAÇÃO: validação de e-mail igual à do controller. PORQUE: cliente e servidor devem aceitar os mesmos e-mails.
+    function validarEmail(email) {
+        if (typeof email !== "string") {
+            return { valido: false, erros: ["O e-mail deve ser um texto."] };
+        }
+
+        var ESPACOS = [" ", "\t", "\n", "\r"];
+        var erros = [];
+        var quantidadeArroba = 0;
+        var posicaoArroba = -1;
+        var temEspaco = false;
+        var i = 0;
+        var j = 0;
+
+        for (i = 0; i < email.length; i++) {
+            for (j = 0; j < ESPACOS.length; j++) {
+                if (email[i] === ESPACOS[j]) {
+                    temEspaco = true;
+                }
+            }
+            if (email[i] === "@") {
+                quantidadeArroba = quantidadeArroba + 1;
+                posicaoArroba = i;
+            }
+        }
+
+        if (temEspaco) {
+            erros[erros.length] = "O e-mail não pode conter espaços.";
+        }
+        if (quantidadeArroba !== 1) {
+            erros[erros.length] = "O e-mail deve conter exatamente um @.";
+        }
+        if (quantidadeArroba === 1 && posicaoArroba === 0) {
+            erros[erros.length] = "O @ não pode ser o primeiro caractere.";
+        }
+        if (quantidadeArroba === 1 && posicaoArroba !== 0) {
+            var pontoValido = false;
+            var letrasEntre = 0;
+            for (i = posicaoArroba + 1; i < email.length; i++) {
+                if (email[i] === ".") {
+                    if (letrasEntre >= 1 && i < email.length - 1) {
+                        pontoValido = true;
+                    }
+                    letrasEntre = 0;
+                } else if ((email[i] >= "a" && email[i] <= "z") || (email[i] >= "A" && email[i] <= "Z")) {
+                    letrasEntre = letrasEntre + 1;
+                }
+            }
+            if (!pontoValido) {
+                erros[erros.length] = "O e-mail deve ter um ponto após o @, com pelo menos uma letra entre eles e não no final.";
+            }
+        }
+
+        return { valido: erros.length === 0, erros: erros };
+    }
+
+    // ALTERAÇÃO: validação de senha igual à do controller, com vetores NUMEROS e MAIUSCULAS. PORQUE: evita divergência entre formulário e API.
+    function validarSenha(senha) {
+        if (typeof senha !== "string") {
+            return { valido: false, erros: ["A senha deve ser um texto."] };
+        }
+
+        var NUMEROS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+        var MAIUSCULAS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+        var erros = [];
+        var temNumero = false;
+        var temMaiuscula = false;
+        var i = 0;
+        var j = 0;
+
+        for (i = 0; i < senha.length; i++) {
+            for (j = 0; j < NUMEROS.length; j++) {
+                if (senha[i] === NUMEROS[j]) {
+                    temNumero = true;
+                }
+            }
+            for (j = 0; j < MAIUSCULAS.length; j++) {
+                if (senha[i] === MAIUSCULAS[j]) {
+                    temMaiuscula = true;
+                }
+            }
+        }
+
+        if (senha.length < 8) {
+            erros[erros.length] = "A senha deve ter no mínimo 8 caracteres.";
+        }
+        if (!temMaiuscula) {
+            erros[erros.length] = "A senha deve conter pelo menos uma letra maiúscula.";
+        }
+        if (!temNumero) {
+            erros[erros.length] = "A senha deve conter pelo menos um número.";
+        }
+
+        return { valido: erros.length === 0, erros: erros };
+    }
+
+    // Exibe uma mensagem no card de aviso do formulário.
+    function mostrarErroCadastro(mensagem) {
+        cardErro.style.display = "block";
+        mensagem_erro.textContent = mensagem;
+    }
+
+    // Zera todos os campos após um cadastro bem-sucedido.
+    function limparFormulario() {
+        document.getElementById("nome_input").value = "";
+        document.getElementById("sobrenome_input").value = "";
+        document.getElementById("email_input").value = "";
+        document.getElementById("senha_input").value = "";
+        document.getElementById("confirmacao_senha_input").value = "";
+    }
+
+    // ALTERAÇÃO: checklist substituído por validarSenha e percorrido com while. PORQUE: mostra apenas os requisitos que faltam.
+    function mostrarRequisitosSenha() {
+        var erros = validarSenha(senha_input.value).erros;
+        var html = "";
+        var i = 0;
+
+        while (i < erros.length) {
+            html = html + '<span style="color:#d9534f">✖ ' + erros[i] + '</span><br>';
+            i = i + 1;
+        }
+
+        requisitos_senha.innerHTML = html;
+    }
+
+    // Valida o formulário e envia os dados para cadastrar o usuário.
+    async function cadastrar() {
+        aguardar();
+
+        // ALTERAÇÃO: leitura dos campos sem trim. PORQUE: a validação de e-mail detecta espaços sem remover caracteres.
+        var nomeVar = nome_input.value;
+        var sobrenomeVar = sobrenome_input.value;
+        var emailVar = email_input.value;
+        var senhaVar = senha_input.value;
+        var confirmacaoSenhaVar = confirmacao_senha_input.value;
+
+        if (
+            nomeVar == "" ||
+            sobrenomeVar == "" ||
+            emailVar == "" ||
+            senhaVar == "" ||
+            confirmacaoSenhaVar == ""
+        ) {
+            mostrarErroCadastro("Preencha todos os campos.");
+            finalizarAguardar();
+            return false;
+        }
+
+        // ALTERAÇÃO: validações de e-mail e senha substituídas por validarEmail e validarSenha. PORQUE: replica as regras do servidor.
+        var resultadoEmail = validarEmail(emailVar);
+        var resultadoSenha = validarSenha(senhaVar);
+        if (!resultadoEmail.valido) {
+            mostrarErroCadastro(resultadoEmail.erros[0]);
+            setInterval(sumirMensagem, 5000);
+            finalizarAguardar();
+            return false;
+        }
+        if (!resultadoSenha.valido) {
+            mostrarErroCadastro(resultadoSenha.erros[0]);
+            setInterval(sumirMensagem, 5000);
+            finalizarAguardar();
+            return false;
+        }
+
+        if (senhaVar !== confirmacaoSenhaVar) {
+            mostrarErroCadastro("A confirmação da senha não confere com a senha.");
+            setInterval(sumirMensagem, 5000);
+            finalizarAguardar();
+            return false;
+        }
+
+        // Agenda para esconder a mensagem exibida após a validação.
+        setInterval(sumirMensagem, 5000);
+
+        try {
+            // Envia os dados do formulário para a API de cadastro.
+            var resposta = await fetch("/usuarios/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                // ALTERAÇÃO: corpo enviado sem o vínculo de empresa. PORQUE: o banco pokeumonia não possui estabelecimento.
+                body: JSON.stringify({
+                    nomeServer: nomeVar,
+                    sobrenomeServer: sobrenomeVar,
+                    emailServer: emailVar,
+                    senhaServer: senhaVar
+                }),
+            });
+
+            // Se a API recusar o cadastro, exibe o erro recebido.
+            if (!resposta.ok) {
+                throw new Error("Houve um erro ao tentar realizar o cadastro.");
+            }
+
+            // Sucesso: avisa o usuário e limpa os campos.
+            mostrarErroCadastro("Cadastro realizado com sucesso! Redirecionando para tela de Login...");
+
+            // Após 2 segundos, abre a tela de login.
+            setTimeout(function () {
+                window.location = "login.html";
+            }, 2000);
+
+            limparFormulario();
+        } catch (erro) {
+            // Falha na requisição ou nos dados enviados.
+            mostrarErroCadastro(erro.message || "Não foi possível realizar o cadastro. Tente novamente.");
+        } finally {
+            // Sempre esconde o carregamento ao terminar.
+            finalizarAguardar();
+        }
+
+        return false;
+    }
+
+    // Esconde o card de aviso.
+    function sumirMensagem() {
+        cardErro.style.display = "none";
+    }
+</script>
