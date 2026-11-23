@@ -43,15 +43,15 @@ function buscarDados(idUsuario) {
         ORDER BY tp.fkUsuarioJogo, tp.posicao;
     `;
 
-    // ALTERAÇÃO: consulta 5 - tipos dos Pokémon do usuário e catálogo completo de cores. PORQUE: monta tipos[] e coresTipos sem nova consulta.
+    // ALTERAÇÃO: consulta 5 - tipos distintos dos Pokémon do usuário e catálogo completo de cores. PORQUE: evita duplicatas de tipo se o mesmo Pokémon for usado em múltiplos jogos/times.
     var sqlTipos = `
-        SELECT pt.fkPokemon AS idPokemon, pt.slot AS slot, t.nome AS tipo, t.cor AS cor
+        SELECT DISTINCT pt.fkPokemon AS idPokemon, pt.slot AS slot, t.nome AS tipo, t.cor AS cor
         FROM pokemonTipo pt
         JOIN tipo t ON t.idTipo = pt.fkTipo
         JOIN timePokemon tp ON tp.fkPokemon = pt.fkPokemon
         JOIN usuarioJogo uj ON uj.idUsuarioJogo = tp.fkUsuarioJogo
         WHERE uj.fkUsuario = ?
-        UNION ALL
+        UNION
         SELECT NULL AS idPokemon, 0 AS slot, t.nome AS tipo, t.cor AS cor
         FROM tipo t
         ORDER BY idPokemon, slot;
@@ -74,7 +74,7 @@ function buscarDados(idUsuario) {
         var horasAno = [];
         var i = 0;
 
-        // ALTERAÇÃO: monta anos[] e horasAno[] a partir do resultado agrupado. PORQUE: o formato do gráfico espera vetores paralelos.
+        // ALTERAÇÃO: monta anos[] e horasAno[] a partir do resultado agrupado. PORQUE: o formato do gráfico de barras espera vetores paralelos.
         for (i = 0; i < horasBanco.length; i++) {
             anos.push(horasBanco[i].ano);
             horasAno.push(Number(horasBanco[i].horas));
@@ -95,53 +95,48 @@ function buscarDados(idUsuario) {
             jogos.push(jogo);
         }
 
-        var pokemonPorId = {};
-        // ALTERAÇÃO: monta cada Pokémon do time com status[6] na ordem PS, ataque, defesa, atqEsp, defEsp, velocidade. PORQUE: é o formato usado no dashboard.
+        // ALTERAÇÃO: agrupa tipos por Pokémon e cataloga cores por nome de tipo antes de montar os times. PORQUE: garante que cada instância do Pokémon receba seus tipos sem risco de sobrescrita.
+        var tiposPorPokemon = {};
+        var coresTipos = {};
+        for (i = 0; i < tiposBanco.length; i++) {
+            var idPokemon = tiposBanco[i].idPokemon;
+            if (idPokemon !== null && idPokemon !== undefined) {
+                if (!tiposPorPokemon[idPokemon]) {
+                    tiposPorPokemon[idPokemon] = [];
+                }
+                if (tiposPorPokemon[idPokemon].indexOf(tiposBanco[i].tipo) === -1) {
+                    tiposPorPokemon[idPokemon].push(tiposBanco[i].tipo);
+                }
+            }
+            if (tiposBanco[i].tipo) {
+                coresTipos[tiposBanco[i].tipo] = tiposBanco[i].cor;
+            }
+        }
+
+        // ALTERAÇÃO: monta cada Pokémon do time com status[6] na ordem PS, ataque, defesa, atqEsp, defEsp, velocidade e seus tipos. PORQUE: alimenta o cálculo de BST, radar e predominância por jogo.
         for (i = 0; i < timesBanco.length; i++) {
             var linhaPokemon = timesBanco[i];
             var pokemon = {
                 nome: linhaPokemon.nome,
-                tipos: [],
+                tipos: tiposPorPokemon[linhaPokemon.idPokemon] ? tiposPorPokemon[linhaPokemon.idPokemon].slice() : [],
                 geracao: linhaPokemon.geracao,
                 status: [
-                    linhaPokemon.ps,
-                    linhaPokemon.ataque,
-                    linhaPokemon.defesa,
-                    linhaPokemon.atqEsp,
-                    linhaPokemon.defEsp,
-                    linhaPokemon.velocidade
+                    Number(linhaPokemon.ps) || 0,
+                    Number(linhaPokemon.ataque) || 0,
+                    Number(linhaPokemon.defesa) || 0,
+                    Number(linhaPokemon.atqEsp) || 0,
+                    Number(linhaPokemon.defEsp) || 0,
+                    Number(linhaPokemon.velocidade) || 0
                 ]
             };
-            pokemonPorId[linhaPokemon.idPokemon] = pokemon;
             if (jogosPorId[linhaPokemon.fkUsuarioJogo]) {
                 jogosPorId[linhaPokemon.fkUsuarioJogo].time.push(pokemon);
             }
         }
 
-        var tiposPorPokemon = {};
-        var coresTipos = {};
-        // ALTERAÇÃO: agrupa tipos por Pokémon e cores por nome de tipo. PORQUE: tipos[] e coresTipos saem da mesma consulta.
-        for (i = 0; i < tiposBanco.length; i++) {
-            var idPokemon = tiposBanco[i].idPokemon;
-            if (idPokemon !== null) {
-                if (!tiposPorPokemon[idPokemon]) {
-                    tiposPorPokemon[idPokemon] = [];
-                }
-                tiposPorPokemon[idPokemon].push(tiposBanco[i].tipo);
-            }
-            coresTipos[tiposBanco[i].tipo] = tiposBanco[i].cor;
-        }
-
-        // ALTERAÇÃO: preenche tipos[] de cada Pokémon usando o slot ordenado do banco. PORQUE: mantém tipo principal antes do secundário.
-        for (var idPokemonKey in pokemonPorId) {
-            if (Object.prototype.hasOwnProperty.call(pokemonPorId, idPokemonKey)) {
-                pokemonPorId[idPokemonKey].tipos = tiposPorPokemon[idPokemonKey] || [];
-            }
-        }
-
-        // ALTERAÇÃO: devolve o objeto completo esperado pela rota. PORQUE: o controller apenas repassa a resposta.
+        // ALTERAÇÃO: devolve o objeto completo com os dados consolidados do usuário. PORQUE: o front-end consome anosJornada, anos, horasAno, jogos e coresTipos diretamente.
         return {
-            anosJornada: perfil.length > 0 ? Number(perfil[0].anosJornada) : 0,
+            anosJornada: perfil.length > 0 && perfil[0].anosJornada !== null ? Number(perfil[0].anosJornada) : 0,
             anos: anos,
             horasAno: horasAno,
             jogos: jogos,

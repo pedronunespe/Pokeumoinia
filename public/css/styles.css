@@ -30,15 +30,28 @@ a { color: inherit; text-decoration: none; }
 .home-page .header { background: linear-gradient(to bottom, rgba(14, 15, 18, 0.9) 0%, rgba(14, 15, 18, 0.6) 55%, rgba(14, 15, 18, 0) 100%); }
 .home-page .navbar a { color: var(--texto); }
 
-/* página inicial: frase de abertura */
-/* ALTERAÇÃO: bloco um pouco mais baixo e gradiente ajustado até a área do texto. PORQUE: o título ficou sobre uma parte clara da foto e perdeu legibilidade. */
-.capa { min-height: 100vh; display: flex; align-items: flex-end; padding-bottom: 120px;
-  background: linear-gradient(to top, #0e0f12 0%, rgba(14, 15, 18, 0.8) 18%, rgba(14, 15, 18, 0.45) 45%, rgba(14, 15, 18, 0) 65%), url("../assets/img/floresta.jpg") 62% 50% / cover no-repeat; }
-.capa h1 { font-size: 64px; max-width: 700px; margin-bottom: 18px; }
-.capa p { font-family: Georgia, serif; font-style: italic; font-size: 21px; max-width: 520px; }
-/* Sombra leve para destacar as letras sem precisar escurecer a imagem inteira. */
-.capa h1, .capa p { text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85); }
-.capa .botao { display: inline-block; width: auto; margin-top: 26px; padding: 12px 30px; }
+/* página inicial: preenchimento uniforme e harmonioso da tela cheia, sem sobras desproporcionais */
+.home-page { min-height: 100vh; display: flex; flex-direction: column; }
+.home-page .capa {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 100px 0 60px;
+  background: linear-gradient(to top, rgba(14, 15, 18, 0.95) 0%, rgba(14, 15, 18, 0.65) 30%, rgba(14, 15, 18, 0.4) 65%, rgba(14, 15, 18, 0.75) 100%),
+              url("../assets/img/floresta.jpg") 62% 50% / cover no-repeat;
+}
+.capa .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+.capa h1 { font-size: 60px; max-width: 760px; margin-bottom: 20px; line-height: 1.18; }
+.capa p { font-family: Georgia, serif; font-style: italic; font-size: 22px; max-width: 680px; line-height: 1.5; }
+/* Sombra para destacar as letras e garantir leitura nítida sobre o fundo. */
+.capa h1, .capa p { text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9); }
+.capa .botao { display: inline-block; width: auto; margin-top: 28px; padding: 14px 34px; }
 
 /* jornada */
 .jornada { padding: 80px 0 40px;
@@ -91,8 +104,9 @@ input:focus { outline: none; border-bottom-color: var(--texto); }
 /* celular */
 /* Ajusta os tamanhos e empilha os marcos em telas pequenas. */
 @media (max-width: 800px) {
-  .capa { padding-bottom: 90px; }
+  .home-page .capa { padding: 90px 0 50px; align-items: center; }
   .capa h1 { font-size: 38px; }
+  .capa p { font-size: 18px; }
   .jornada-page .jornada { padding-top: 110px; }
   .linha::before { left: 6px; }
   .marco, .marco:nth-child(even) { flex-direction: column; align-items: stretch; gap: 16px; padding-left: 30px; }

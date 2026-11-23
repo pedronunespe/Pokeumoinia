@@ -5,9 +5,9 @@
 .sub { color: var(--mudo); margin-bottom: 24px; }
 
 /* grade de cartões: 4 colunas, cartões largos ocupam 2 */
-.grade { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.grade { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: stretch; }
 .span2 { grid-column: span 2; }
-.card-dash { min-width: 0; padding: 20px; background-color: #131315; border-radius: 14px; }
+.card-dash { min-width: 0; padding: 20px; background-color: #131315; border-radius: 14px; display: flex; flex-direction: column; justify-content: space-between; }
 .card-dash h3 { font-size: 20px; margin-bottom: 14px; color: var(--suave); }
 
 /* indicadores */
@@ -18,8 +18,8 @@
 .card-tipo p, #card_tipo p, #card_tipo small { color: inherit; }
 
 /* gráficos e lista */
-.area-grafico { position: relative; height: 300px; }
-.historico { list-style: none; }
+.area-grafico { position: relative; height: 300px; width: 100%; }
+.historico { list-style: none; max-height: 300px; overflow-y: auto; }
 .item { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #26262a; }
 .item span { color: var(--mudo); font-size: 14px; }
 .resumo { margin-top: 12px; color: var(--suave); font-size: 14px; }

@@ -5,8 +5,8 @@ var dashboardModel = require("../models/dashboardModel");
 function dados(req, res) {
     var idUsuario = req.params.idUsuario;
 
-    // ALTERAÇÃO: valida o id da URL antes de consultar. PORQUE: evita consultas com id vazio ou inválido.
-    if (idUsuario === undefined || idUsuario === "") {
+    // ALTERAÇÃO: valida o id da URL antes de consultar. PORQUE: evita consultas com id vazio, indefinido ou inválido.
+    if (idUsuario === undefined || idUsuario === "" || isNaN(idUsuario)) {
         return res.status(400).send("Informe um id de usuário válido.");
     }
 
