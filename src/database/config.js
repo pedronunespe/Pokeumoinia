@@ -23,21 +23,30 @@ function executar(instrucao, parametros) {
     // Cria a Promise que abre a conexão, executa a query e a fecha em seguida.
     return new Promise(function (resolve, reject) {
         var conexao = mysql.createConnection(mySqlConfig);
-        conexao.connect();
 
-        // Executa o SQL com os parâmetros recebidos (ou com um array vazio).
-        conexao.query(instrucao, parametros || [], function (erro, resultados) {
-            conexao.end();
-            if (erro) {
-                reject(erro);
-            }
-            console.log(resultados);
-            resolve(resultados);
+        // ALTERAÇÃO: o evento 'error' agora registra e rejeita a Promise. PORQUE: antes a falha de conexão era engolida e a rota ficava sem resposta.
+        conexao.on("error", function (erro) {
+            console.error("ERRO NO MySQL SERVER:", erro.sqlMessage || erro.message || erro);
+            reject(erro);
         });
 
-        // Trata falhas de conexão com o servidor MySQL.
-        conexao.on('error', function (erro) {
-            return ("ERRO NO MySQL SERVER: ", erro.sqlMessage);
+        // A query só é enviada depois que a conexão foi realmente estabelecida.
+        conexao.connect(function (erroConexao) {
+            if (erroConexao) {
+                reject(erroConexao);
+                return;
+            }
+
+            // Executa o SQL com os parâmetros recebidos (ou com um array vazio).
+            conexao.query(instrucao, parametros || [], function (erro, resultados) {
+                conexao.end();
+                if (erro) {
+                    reject(erro);
+                    return;
+                }
+                // ALTERAÇÃO: log de resultados removido. PORQUE: cadastros passaram a reunir mais dados e o console ficaria poluído.
+                resolve(resultados);
+            });
         });
     });
 }

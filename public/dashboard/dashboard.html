@@ -7,28 +7,34 @@
     <title>Pokeumonia | Dashboard</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/dashboard-style.css">
+    <!-- ALTERAÇÃO: sessão, utilitários de API e sidebar passaram a ser scripts compartilhados. PORQUE: todas as páginas da área logada usam o mesmo menu. -->
     <script src="../js/sessao.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/layout.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body class="dashboard-page" onload="validarSessao()">
+<body class="dashboard-page" onload="montarSidebar('dashboard.html'); validarSessao()">
 
-    <!-- Cabeçalho com saudação ao usuário e opção de sair. -->
-    <div class="header">
-        <div class="container">
-            <a class="logo" href="../index.html">Pokeumonia</a>
-            <ul class="navbar">
-                <li>Olá, <span id="b_usuario">usuário</span>!</li>
-                <li><a href="#" onclick="limparSessao()">Sair</a></li>
-            </ul>
-        </div>
-    </div>
+    <!-- ALTERAÇÃO: layout em duas colunas com a sidebar de navegação. PORQUE: a dashboard agora tem páginas de cadastro e configuração. -->
+    <div class="app-layout">
+        <aside class="sidebar" id="app_sidebar"></aside>
 
-    <!-- Painel com os indicadores e gráficos da jornada. -->
-    <div class="dash">
-        <div class="container">
-            <h1>Minha jornada em números</h1>
-            <p class="sub">Dados de exemplo: troque os anos, os jogos e os times no script, no fim desta página, pelos seus.</p>
+        <main class="conteudo dash">
+            <div class="cabecalho-pagina">
+                <div>
+                    <h1>Minha jornada em números</h1>
+                    <p>Os indicadores abaixo são calculados com os jogos, horas e times cadastrados no banco.</p>
+                </div>
+                <div class="botoes">
+                    <a class="botao botao-pequeno botao-secundario" href="jogos.html">Gerenciar jogos</a>
+                    <a class="botao botao-pequeno" href="times.html">Montar times</a>
+                </div>
+            </div>
+
+            <!-- Aviso de erro/estado vazio, preenchido por dashboard.js. -->
+            <div class="aviso" id="mensagem_dashboard"></div>
+            <div class="aviso" id="estado_vazio">Ainda não há jogos ou horas cadastrados. Comece em <a href="jogos.html">Jogos</a> para popular a dashboard.</div>
 
             <!-- Grade de cards: KPIs, gráficos e listas. -->
             <div class="grade">
@@ -77,274 +83,16 @@
                     <p class="resumo" id="afinidade"></p>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Rodapé com o aviso sobre o projeto. -->
     <div class="footer">
-        <div class="container">
-            Projeto acadêmico sem fins lucrativos. Pokémon é marca da Nintendo, Game Freak e The Pokémon Company.
-        </div>
+        Projeto acadêmico sem fins lucrativos. Pokémon é marca da Nintendo, Game Freak e The Pokémon Company.
     </div>
 
-    <script>
-        // ---------- Dados de exemplo (troque pelos seus) ----------
-        // Cada Pokémon: nome, tipos, geração e status base [PS, Ataque, Defesa, Atq. Esp., Def. Esp., Velocidade]
-        function pokemon(nome, tipos, geracao, status) {
-            return { nome: nome, tipos: tipos, geracao: geracao, status: status };
-        }
-
-        var charizard = pokemon('Charizard', ['Fogo', 'Voador'], 1, [78, 84, 78, 109, 85, 100]);
-        var blastoise = pokemon('Blastoise', ['Água'], 1, [79, 83, 100, 85, 105, 78]);
-        var venusaur = pokemon('Venusaur', ['Planta', 'Venenoso'], 1, [80, 82, 83, 100, 100, 80]);
-        var gengar = pokemon('Gengar', ['Fantasma', 'Venenoso'], 1, [60, 65, 60, 130, 75, 110]);
-        var dragonite = pokemon('Dragonite', ['Dragão', 'Voador'], 1, [91, 134, 95, 100, 100, 80]);
-        var arcanine = pokemon('Arcanine', ['Fogo'], 1, [90, 110, 80, 100, 80, 95]);
-        var tyranitar = pokemon('Tyranitar', ['Pedra', 'Sombrio'], 2, [100, 134, 110, 95, 100, 61]);
-        var blaziken = pokemon('Blaziken', ['Fogo', 'Lutador'], 3, [80, 120, 70, 110, 70, 80]);
-        var swampert = pokemon('Swampert', ['Água', 'Terra'], 3, [100, 110, 90, 85, 90, 60]);
-        var gardevoir = pokemon('Gardevoir', ['Psíquico', 'Fada'], 3, [68, 65, 65, 125, 115, 80]);
-        var metagross = pokemon('Metagross', ['Aço', 'Psíquico'], 3, [80, 135, 130, 95, 90, 70]);
-        var garchomp = pokemon('Garchomp', ['Dragão', 'Terra'], 4, [108, 130, 95, 80, 85, 102]);
-        var lucario = pokemon('Lucario', ['Lutador', 'Aço'], 4, [70, 110, 70, 115, 70, 90]);
-        var infernape = pokemon('Infernape', ['Fogo', 'Lutador'], 4, [76, 104, 71, 104, 71, 108]);
-        var greninja = pokemon('Greninja', ['Água', 'Sombrio'], 6, [72, 95, 67, 103, 71, 122]);
-
-        var jogos = [
-            { nome: 'Pixelmon', horas: 120, nota: 8, time: [charizard, garchomp, lucario, gengar, dragonite, blastoise] },
-            { nome: 'Pokémon Planet', horas: 90, nota: 8, time: [blaziken, swampert, gardevoir, arcanine, dragonite, metagross] },
-            { nome: 'Brick Bronze', horas: 540, nota: 10, time: [infernape, garchomp, gengar, metagross, tyranitar, gardevoir] },
-            { nome: 'Legends: Arceus', horas: 70, nota: 9, time: [lucario, garchomp, gengar, blaziken, tyranitar, venusaur] },
-            { nome: 'Cobblemon', horas: 160, nota: 9, time: [charizard, venusaur, blastoise, greninja, swampert, tyranitar] }
-        ];
-
-        var nomesStatus = ['PS', 'Ataque', 'Defesa', 'Atq. Esp.', 'Def. Esp.', 'Velocidade'];
-
-        // Horas jogadas por ano (a soma deve bater com a soma das horas dos jogos)
-        var anos = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026];
-        var horasAno = [10, 15, 60, 140, 200, 130, 40, 25, 15, 10, 20, 110, 120, 85];
-
-        // Cor de cada tipo
-        var coresTipos = {
-            'Fogo': '#f08030', 'Água': '#6890f0', 'Planta': '#78c850', 'Venenoso': '#a040a0',
-            'Voador': '#a890f0', 'Dragão': '#7038f8', 'Terra': '#e0c068', 'Lutador': '#c03028',
-            'Aço': '#b8b8d0', 'Fantasma': '#705898', 'Pedra': '#b8a038', 'Sombrio': '#705848',
-            'Psíquico': '#f85888', 'Fada': '#ee99ac', 'Inseto': '#a8b820', 'Elétrico': '#f8d030'
-        };
-        var tiposEscuros = ['Água', 'Venenoso', 'Dragão', 'Lutador', 'Fantasma', 'Sombrio'];
-
-        // ---------- Horas totais e nível ----------
-        var totalHoras = 0;
-        var maiorHora = 0;
-        // Soma todas as horas e descobre o ano com mais jogo.
-        for (var i = 0; i < horasAno.length; i++) {
-            totalHoras = totalHoras + horasAno[i];
-            if (horasAno[i] > maiorHora) {
-                maiorHora = horasAno[i];
-            }
-        }
-        var anosJornada = new Date().getFullYear() - 2013;
-        var nivel = '';
-        // Define o título do treinador conforme as horas jogadas.
-        if (totalHoras >= 1000) {
-            nivel = 'Treinador mestre';
-        } else if (totalHoras >= 200) {
-            nivel = 'Treinador experiente';
-        } else {
-            nivel = 'Treinador iniciante';
-        }
-        // Atualiza os cards de horas totais e de nível.
-        document.getElementById('kpi_horas').innerHTML = totalHoras + ' <span class="unidade">h</span>';
-        document.getElementById('kpi_nivel').innerHTML = nivel + ' · ' + anosJornada + ' anos de jornada';
-
-        // ---------- Linha do tempo (barras) ----------
-        var coresBarras = [];
-        // Destaca em vermelho o ano em que mais jogou.
-        for (var j = 0; j < horasAno.length; j++) {
-            if (horasAno[j] == maiorHora) {
-                coresBarras.push('#ff4a33');
-            } else {
-                coresBarras.push('#c9a574');
-            }
-        }
-
-        // Desenha o gráfico de barras das horas por ano.
-        new Chart(document.getElementById('grafico_barras'), {
-            type: 'bar',
-            data: {
-                labels: anos,
-                datasets: [{ label: 'Horas', data: horasAno, backgroundColor: coresBarras }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, ticks: { color: '#9a9ca3' }, grid: { color: 'rgba(255, 255, 255, 0.08)' } },
-                    x: { ticks: { color: '#9a9ca3' }, grid: { display: false } }
-                }
-            }
-        });
-
-        // ---------- Radar e BST: média dos status de todos os times ----------
-        var somaStatus = [0, 0, 0, 0, 0, 0];
-        var totalPokemon = 0;
-        // Soma os status de todos os Pokémon usados nos times.
-        for (var a = 0; a < jogos.length; a++) {
-            for (var b = 0; b < jogos[a].time.length; b++) {
-                for (var c = 0; c < 6; c++) {
-                    somaStatus[c] = somaStatus[c] + jogos[a].time[b].status[c];
-                }
-                totalPokemon = totalPokemon + 1;
-            }
-        }
-        var mediaStatus = [];
-        var bst = 0;
-        // Calcula a média de cada status e o BST (soma das médias).
-        for (var d = 0; d < 6; d++) {
-            mediaStatus.push(Math.round(somaStatus[d] / totalPokemon));
-            bst = bst + mediaStatus[d];
-        }
-        document.getElementById('kpi_bst').innerHTML = bst;
-
-        // Desenha o gráfico de radar com a média dos status.
-        new Chart(document.getElementById('grafico_radar'), {
-            type: 'radar',
-            data: {
-                labels: nomesStatus,
-                datasets: [{
-                    label: 'Status geral',
-                    data: mediaStatus,
-                    borderColor: '#c9a574',
-                    backgroundColor: 'rgba(201, 165, 116, 0.25)',
-                    pointBackgroundColor: '#c9a574',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 140,
-                        ticks: { color: '#9a9ca3', backdropColor: 'transparent', stepSize: 50 },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
-                        pointLabels: { color: '#b9bcc6' }
-                    }
-                }
-            }
-        });
-
-        // ---------- Tipo predominante em cada jogo e tipo mais utilizado ----------
-        var listaTipos = document.getElementById('lista_tipos');
-        var contagemGeral = {};
-        // Conta os tipos de cada time para achar o predominante em cada jogo.
-        for (var e = 0; e < jogos.length; e++) {
-            var contagem = {};
-            for (var f = 0; f < jogos[e].time.length; f++) {
-                for (var g = 0; g < jogos[e].time[f].tipos.length; g++) {
-                    var tipo = jogos[e].time[f].tipos[g];
-                    contagem[tipo] = (contagem[tipo] || 0) + 1;
-                    contagemGeral[tipo] = (contagemGeral[tipo] || 0) + 1;
-                }
-            }
-
-            // Descobre qual tipo apareceu mais vezes no time.
-            var maior = 0;
-            var tipos = Object.keys(contagem);
-            for (var h = 0; h < tipos.length; h++) {
-                if (contagem[tipos[h]] > maior) {
-                    maior = contagem[tipos[h]];
-                }
-            }
-
-            // Guarda todos os tipos que empataram na maior contagem.
-            var predominantes = [];
-            for (var k = 0; k < tipos.length; k++) {
-                if (contagem[tipos[k]] == maior) {
-                    predominantes.push(tipos[k]);
-                }
-            }
-
-            listaTipos.innerHTML += '<li class="item"><strong>' + jogos[e].nome + '</strong><span>' + jogos[e].horas + ' h · ' + predominantes.join(' e ') + ' (' + maior + ' de ' + jogos[e].time.length + ')</span></li>';
-        }
-
-        // Verifica qual tipo foi o mais usado em todos os times.
-        var tiposGerais = Object.keys(contagemGeral);
-        var tipoTop = '';
-        var maiorGeral = 0;
-        for (var t = 0; t < tiposGerais.length; t++) {
-            if (contagemGeral[tiposGerais[t]] > maiorGeral) {
-                maiorGeral = contagemGeral[tiposGerais[t]];
-                tipoTop = tiposGerais[t];
-            }
-        }
-        // Pinta o card com a cor do tipo e ajusta o contraste do texto.
-        var cardTipo = document.getElementById('card_tipo');
-        cardTipo.style.backgroundColor = coresTipos[tipoTop];
-        if (tiposEscuros.indexOf(tipoTop) >= 0) {
-            cardTipo.style.color = '#ffffff';
-        } else {
-            cardTipo.style.color = '#0b0b0c';
-        }
-        document.getElementById('kpi_tipo').innerHTML = tipoTop;
-        document.getElementById('kpi_tipo_qtd').innerHTML = maiorGeral + ' aparições nos meus times';
-
-        // ---------- Rosca: Pokémon por geração ----------
-        var porGeracao = {};
-        // Agrupa os Pokémon por geração para o gráfico de rosca.
-        for (var m = 0; m < jogos.length; m++) {
-            for (var n = 0; n < jogos[m].time.length; n++) {
-                var gen = 'Geração ' + jogos[m].time[n].geracao;
-                porGeracao[gen] = (porGeracao[gen] || 0) + 1;
-            }
-        }
-
-        var nomesGeracoes = Object.keys(porGeracao).sort();
-        var qtdGeracoes = [];
-        var maiorGeracao = 0;
-        var geracaoTop = '';
-        // Monta as listas do gráfico e descobre a geração mais presente.
-        for (var p = 0; p < nomesGeracoes.length; p++) {
-            qtdGeracoes.push(porGeracao[nomesGeracoes[p]]);
-            if (porGeracao[nomesGeracoes[p]] > maiorGeracao) {
-                maiorGeracao = porGeracao[nomesGeracoes[p]];
-                geracaoTop = nomesGeracoes[p];
-            }
-        }
-
-        var paleta = ['#c9a574', '#8a6a43', '#b9bcc6', '#6f7380', '#4a4d57'];
-        var coresRosca = [];
-        // Destaca a geração favorita e pinta as demais com a paleta.
-        for (var q = 0; q < nomesGeracoes.length; q++) {
-            if (nomesGeracoes[q] == geracaoTop) {
-                coresRosca.push('#ff4a33');
-            } else {
-                coresRosca.push(paleta[q % paleta.length]);
-            }
-        }
-
-        // Mostra a porcentagem de Pokémon da geração com mais afinidade.
-        var percentual = (maiorGeracao / totalPokemon) * 100;
-        document.getElementById('afinidade').innerHTML = geracaoTop + ': ' + maiorGeracao + ' de ' + totalPokemon + ' Pokémon dos meus times (' + percentual.toFixed(0) + '%).';
-
-        // Desenha o gráfico de rosca de Pokémon por geração.
-        new Chart(document.getElementById('grafico_rosca'), {
-            type: 'doughnut',
-            data: {
-                labels: nomesGeracoes,
-                datasets: [{ data: qtdGeracoes, backgroundColor: coresRosca, borderColor: '#131315', borderWidth: 2 }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom', labels: { color: '#b9bcc6' } } }
-            }
-        });
-    </script>
+    <!-- ALTERAÇÃO: os dados de exemplo embutidos foram substituídos pelo script que consome a API. PORQUE: a dashboard agora é dinâmica. -->
+    <script src="dashboard.js"></script>
 </body>
 
 </html>

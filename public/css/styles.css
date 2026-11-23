@@ -26,11 +26,19 @@ a { color: inherit; text-decoration: none; }
 .navbar a { color: var(--suave); }
 .navbar a:hover, .navbar .agora a { color: var(--texto); }
 
+/* página inicial: gradiente escuro no cabeçalho para destacar a navbar sobre a capa. */
+.home-page .header { background: linear-gradient(to bottom, rgba(14, 15, 18, 0.9) 0%, rgba(14, 15, 18, 0.6) 55%, rgba(14, 15, 18, 0) 100%); }
+.home-page .navbar a { color: var(--texto); }
+
 /* página inicial: frase de abertura */
-.capa { min-height: 100vh; display: flex; align-items: flex-end; padding-bottom: 60px;
-  background: linear-gradient(to top, #0e0f12 0%, rgba(14, 15, 18, 0.2) 100%), url("../assets/img/floresta.jpg") 62% 50% / cover no-repeat; }
+/* ALTERAÇÃO: bloco um pouco mais baixo e gradiente ajustado até a área do texto. PORQUE: o título ficou sobre uma parte clara da foto e perdeu legibilidade. */
+.capa { min-height: 100vh; display: flex; align-items: flex-end; padding-bottom: 120px;
+  background: linear-gradient(to top, #0e0f12 0%, rgba(14, 15, 18, 0.8) 18%, rgba(14, 15, 18, 0.45) 45%, rgba(14, 15, 18, 0) 65%), url("../assets/img/floresta.jpg") 62% 50% / cover no-repeat; }
 .capa h1 { font-size: 64px; max-width: 700px; margin-bottom: 18px; }
 .capa p { font-family: Georgia, serif; font-style: italic; font-size: 21px; max-width: 520px; }
+/* Sombra leve para destacar as letras sem precisar escurecer a imagem inteira. */
+.capa h1, .capa p { text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85); }
+.capa .botao { display: inline-block; width: auto; margin-top: 26px; padding: 12px 30px; }
 
 /* jornada */
 .jornada { padding: 80px 0 40px;
@@ -51,6 +59,10 @@ a { color: inherit; text-decoration: none; }
 .foto { height: 230px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px dashed rgba(255, 255, 255, 0.3); border-radius: 4px; color: var(--mudo); }
 .foto img { width: 100%; height: 100%; object-fit: cover; }
 
+/* ALTERAÇÃO: ajustes da nova página jornada.html. PORQUE: o cabeçalho fixo ocupa o topo e a página precisa de respiro. */
+.jornada-page .jornada { min-height: 100vh; padding: 140px 0 80px; }
+.jornada-intro { max-width: 620px; margin: -36px auto 46px; text-align: center; color: var(--suave); font-family: Georgia, serif; font-style: italic; }
+
 /* login e cadastro */
 .login-page .login, .cadastro-page .login { min-height: 100vh; padding: 110px 0 50px; }
 .login-page .login { background: linear-gradient(rgba(14, 15, 18, 0.35), rgba(14, 15, 18, 0.7)), url("../assets/img/arco.jpg") center / cover no-repeat; }
@@ -63,7 +75,8 @@ input { width: 100%; padding: 10px 0; background-color: transparent; border: 0; 
 input:focus { outline: none; border-bottom-color: var(--texto); }
 #requisitos_senha { font-size: 13px; margin-top: 6px; }
 .botao { width: 100%; margin-top: 10px; padding: 12px; border: 1px solid var(--texto); border-radius: 30px; background-color: var(--texto); color: var(--fundo); font-size: 16px; cursor: pointer; }
-.botao:hover { box-shadow: 0 0 18px rgba(255, 74, 51, 0.5); }
+/* ALTERAÇÃO: brilho removido do botão. PORQUE: o hover deve ser discreto, sem luz ao redor. */
+.botao:hover { background-color: #ded8cc; border-color: #ded8cc; }
 .troca { margin-top: 20px; font-size: 14px; color: var(--mudo); }
 .troca a { color: var(--texto); text-decoration: underline; }
 .alerta_erro { display: flex; justify-content: center; margin-bottom: 16px; }
@@ -78,7 +91,9 @@ input:focus { outline: none; border-bottom-color: var(--texto); }
 /* celular */
 /* Ajusta os tamanhos e empilha os marcos em telas pequenas. */
 @media (max-width: 800px) {
+  .capa { padding-bottom: 90px; }
   .capa h1 { font-size: 38px; }
+  .jornada-page .jornada { padding-top: 110px; }
   .linha::before { left: 6px; }
   .marco, .marco:nth-child(even) { flex-direction: column; align-items: stretch; gap: 16px; padding-left: 30px; }
   .marco::before { left: 6px; top: 10px; transform: none; }

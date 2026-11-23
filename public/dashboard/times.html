@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokeumonia | Times</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dashboard-style.css">
+    <script src="../js/sessao.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/layout.js"></script>
+</head>
+
+<body onload="montarSidebar('times.html'); validarSessao()">
+
+    <div class="app-layout">
+        <aside class="sidebar" id="app_sidebar"></aside>
+
+        <main class="conteudo">
+            <div class="cabecalho-pagina">
+                <div>
+                    <h1>Meus times</h1>
+                    <p>Escolha um jogo, uma posição de 1 a 6 e um Pokémon do catálogo.</p>
+                </div>
+                <a class="botao botao-pequeno botao-secundario" href="pokemons.html">Cadastrar Pokémon</a>
+            </div>
+
+            <div class="aviso" id="mensagem_times"></div>
+
+            <section class="painel">
+                <h2>Definir posição do time</h2>
+                <p>Usar a mesma posição novamente substitui o Pokémon anterior.</p>
+                <div class="grade-form">
+                    <label><span>Jogo</span><select id="time_jogo"></select></label>
+                    <label><span>Posição</span><select id="time_posicao"></select></label>
+                    <label><span>Pokémon</span><select id="time_pokemon"></select></label>
+                    <div class="botoes"><button type="button" class="botao botao-pequeno" onclick="salvarTime()">Salvar no time</button></div>
+                </div>
+            </section>
+
+            <section class="painel">
+                <h2>Times montados</h2>
+                <table class="tabela">
+                    <thead>
+                        <tr><th>Jogo</th><th>Posição</th><th>Pokémon</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody id="corpo_times"></tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script src="times.js"></script>
+</body>
+
+</html>

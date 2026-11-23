@@ -28,6 +28,12 @@ var usuarioRouter = require("./src/routes/usuarios");
 // ALTERAÇÃO: imports das rotas antigas (avisos, medidas, aquários e empresas) removidos. PORQUE: os arquivos e tabelas saíram do projeto.
 // ALTERAÇÃO: importação do roteador de dashboard adicionada. PORQUE: o painel precisa expor os dados do banco pokeumonia.
 var dashboardRouter = require("./src/routes/dashboard");
+// ALTERAÇÃO: importação dos roteadores de cadastro usados pela dashboard. PORQUE: as páginas de configuração precisam gravar jogos, Pokémon, horas, times e perfil no banco.
+var catalogosRouter = require("./src/routes/catalogos");
+var jogosRouter = require("./src/routes/jogos");
+var pokemonsRouter = require("./src/routes/pokemons");
+var timesRouter = require("./src/routes/times");
+var perfilRouter = require("./src/routes/perfil");
 
 // Habilita o servidor a receber dados em JSON e em formulário.
 app.use(express.json());
@@ -45,6 +51,12 @@ app.use("/usuarios", usuarioRouter);
 // ALTERAÇÃO: registros das rotas antigas (avisos, medidas, aquários e empresas) removidos. PORQUE: não há mais arquivos nem tabelas para elas.
 // ALTERAÇÃO: roteador do dashboard registrado em /dashboard. PORQUE: a API deve servir os dados do painel.
 app.use("/dashboard", dashboardRouter);
+// ALTERAÇÃO: roteadores de cadastro registrados em seus prefixos. PORQUE: o front-end chama /catalogos, /jogos, /pokemons, /times e /perfil.
+app.use("/catalogos", catalogosRouter);
+app.use("/jogos", jogosRouter);
+app.use("/pokemons", pokemonsRouter);
+app.use("/times", timesRouter);
+app.use("/perfil", perfilRouter);
 
 // Inicia o servidor na porta configurada e exibe as informações no console.
 app.listen(PORTA_APP, function () {

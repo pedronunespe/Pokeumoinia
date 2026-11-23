@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokeumonia | Jogos</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dashboard-style.css">
+    <script src="../js/sessao.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/layout.js"></script>
+</head>
+
+<body onload="montarSidebar('jogos.html'); validarSessao()">
+
+    <div class="app-layout">
+        <aside class="sidebar" id="app_sidebar"></aside>
+
+        <main class="conteudo">
+            <div class="cabecalho-pagina">
+                <div>
+                    <h1>Jogos e horas</h1>
+                    <p>Cadastre jogos, vincule-os à sua jornada e registre as horas por ano.</p>
+                </div>
+                <a class="botao botao-pequeno botao-secundario" href="dashboard.html">Ver dashboard</a>
+            </div>
+
+            <div class="aviso" id="mensagem_jogos"></div>
+
+            <!-- Catálogo global: precisa existir antes de vincular o jogo ao usuário. -->
+            <section class="painel">
+                <h2>Novo jogo no catálogo</h2>
+                <p>Use esta seção quando o jogo ainda não aparecer na lista da sua jornada.</p>
+                <div class="grade-form">
+                    <label><span>Nome do jogo</span><input id="jogo_nome" type="text" maxlength="60" placeholder="Ex.: Cobblemon"></label>
+                    <label><span>Plataforma</span><input id="jogo_plataforma" type="text" maxlength="30" placeholder="Ex.: Minecraft"></label>
+                    <label><span>Ano de lançamento</span><input id="jogo_ano" type="number" min="1900" max="2100" placeholder="2023"></label>
+                    <div class="botoes"><button type="button" class="botao botao-pequeno" onclick="cadastrarJogoCatalogo()">Cadastrar jogo</button></div>
+                </div>
+            </section>
+
+            <!-- Vínculo usuário <-> jogo. -->
+            <section class="painel">
+                <h2>Adicionar jogo à minha jornada</h2>
+                <p>A nota é opcional e vai de 0 a 10.</p>
+                <div class="grade-form">
+                    <label><span>Jogo</span><select id="jogo_catalogo"></select></label>
+                    <label><span>Nota (0 a 10)</span><input id="nota_jogo" type="number" min="0" max="10" step="0.1" placeholder="8.5"></label>
+                    <div class="botoes"><button type="button" class="botao botao-pequeno" onclick="adicionarJogoUsuario()">Adicionar</button></div>
+                </div>
+            </section>
+
+            <!-- Lista dos jogos já vinculados, com edição de nota e remoção. -->
+            <section class="painel">
+                <h2>Meus jogos</h2>
+                <p>Remover um jogo também apaga as horas e o time vinculados a ele.</p>
+                <table class="tabela">
+                    <thead>
+                        <tr><th>Jogo</th><th>Nota</th><th>Horas</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody id="corpo_jogos"></tbody>
+                </table>
+            </section>
+
+            <!-- Registro de horas: combinação jogo + ano é única no banco. -->
+            <section class="painel">
+                <h2>Registrar horas</h2>
+                <p>Se o jogo e o ano já existirem, o valor será atualizado.</p>
+                <div class="grade-form">
+                    <label><span>Jogo</span><select id="hora_jogo"></select></label>
+                    <label><span>Ano</span><input id="ano_hora" type="number" min="1900" max="2100" value="2026"></label>
+                    <label><span>Horas</span><input id="horas_hora" type="number" min="0" step="0.1" placeholder="120"></label>
+                    <div class="botoes"><button type="button" class="botao botao-pequeno" onclick="salvarHora()">Salvar horas</button></div>
+                </div>
+            </section>
+
+            <section class="painel">
+                <h2>Horas cadastradas</h2>
+                <table class="tabela">
+                    <thead>
+                        <tr><th>Jogo</th><th>Ano</th><th>Horas</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody id="corpo_horas"></tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script src="jogos.js"></script>
+</body>
+
+</html>
