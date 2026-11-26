@@ -27,11 +27,29 @@
     <div class="capa">
         <div class="container">
             <h1>Uma floresta de lembranças</h1>
-            <p>Do anime em 2013 aos mundos que construí em mods e no Roblox, esta é a minha trajetória com Pokémon.</p>
+            <p id="fraseAleatoria"></p>
             <!-- ALTERAÇÃO: botão movido para dentro da capa. PORQUE: agora título, texto e botão sobem juntos. -->
             <a class="botao" href="jornada.html">Conheça minha jornada</a>
         </div>
     </div>
+
+    <script>
+        var frases = [
+            "O anime de transformou o que era \"entediante\" em paixão.",
+            "Um jogo desconhecido chamado Pokemon Brick Bronze, o jogo qua mais marcou minha história com a franquia.",
+            "O anime do X & Y me conquistaram de vez, o que me fez ter tanto apreço com este mundo.",
+            "Legends: Arceus foi meu primeiro título oficial no Switch: 90% em uma noite.",
+            "O Pokeumonia guarda minha jornada e memórias.",
+            "Do Pixelmon ao Cobblemon, mods que me fizeram voltar a jogar.","Do anime em 2013 aos dias atuais, esta é a minha trajetória com Pokémon."
+        ];
+
+        function mostrarFraseAleatoria() {
+            var indice = Math.floor(Math.random() * frases.length);
+            document.querySelector("#fraseAleatoria").innerHTML = frases[indice];
+        }
+
+        mostrarFraseAleatoria();
+    </script>
 </body>
 
 </html>
