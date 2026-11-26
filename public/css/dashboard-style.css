@@ -52,7 +52,7 @@
 .sidebar-menu { display: flex; flex-direction: column; gap: 6px; }
 .sidebar-link { display: block; padding: 10px 12px; border-radius: 9px; color: var(--suave); }
 .sidebar-link:hover { background-color: #1c1c20; color: var(--texto); }
-.sidebar-link.item-ativo { background-color: #242026; color: var(--texto); box-shadow: inset 3px 0 0 var(--terra); }
+.sidebar-link.item-ativo { background-color: #242026; color: var(--texto); }
 .sidebar-link strong { display: block; font-size: 14px; }
 .sidebar-link small { display: block; margin-top: 2px; color: var(--mudo); font-size: 11px; }
 
@@ -68,7 +68,7 @@
   font-size: 13px;
   cursor: pointer;
 }
-.sidebar-sair:hover { border-color: #ff4a33; color: #ff8b7a; }
+.sidebar-sair:hover { background-color: #1c1c20; color: var(--texto); }
 
 .conteudo { min-width: 0; padding: 34px 38px 60px; }
 .cabecalho-pagina { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-bottom: 24px; }

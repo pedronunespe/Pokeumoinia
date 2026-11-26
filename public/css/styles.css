@@ -18,29 +18,27 @@ h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; font-weight: normal
 a { color: inherit; text-decoration: none; }
 .container { width: 90%; max-width: 1000px; margin: 0 auto; }
 
-/* navbar transparente */
-.header { position: absolute; top: 0; left: 0; width: 100%; z-index: 10; background-color: transparent; }
+/* navbar preta levemente transparente nas páginas iniciais */
+.header { position: absolute; top: 0; left: 0; width: 100%; z-index: 10; background-color: rgba(14, 15, 18, 0.85); }
 .header .container { display: flex; justify-content: space-between; align-items: center; height: 64px; }
 .logo { font-family: Georgia, serif; font-size: 20px; }
 .navbar { list-style: none; display: flex; gap: 24px; }
 .navbar a { color: var(--suave); }
 .navbar a:hover, .navbar .agora a { color: var(--texto); }
 
-/* página inicial: gradiente escuro no cabeçalho para destacar a navbar sobre a capa. */
-.home-page .header { background: linear-gradient(to bottom, rgba(14, 15, 18, 0.9) 0%, rgba(14, 15, 18, 0.6) 55%, rgba(14, 15, 18, 0) 100%); }
-.home-page .navbar a { color: var(--texto); }
-
 /* página inicial: preenchimento uniforme e harmonioso da tela cheia, sem sobras desproporcionais */
 .home-page { min-height: 100vh; display: flex; flex-direction: column; }
 .home-page .capa {
+  position: relative;
   flex: 1;
   min-height: 100vh;
   display: flex;
   align-items: center;
   padding: 100px 0 60px;
-  background: linear-gradient(to top, rgba(14, 15, 18, 0.95) 0%, rgba(14, 15, 18, 0.65) 30%, rgba(14, 15, 18, 0.4) 65%, rgba(14, 15, 18, 0.75) 100%),
-              url("../assets/img/floresta.jpg") 62% 50% / cover no-repeat;
+  background: url("../assets/img/floresta.jpg") 62% 50% / cover no-repeat;
 }
+.home-page .capa::before { content: ""; position: absolute; inset: 0; background-color: rgba(14, 15, 18, 0.35); }
+.home-page .capa > .container { position: relative; z-index: 1; }
 .capa .container {
   display: flex;
   flex-direction: column;
@@ -54,8 +52,10 @@ a { color: inherit; text-decoration: none; }
 .capa .botao { display: inline-block; width: auto; margin-top: 28px; padding: 14px 34px; }
 
 /* jornada */
-.jornada { padding: 80px 0 40px;
-  background: linear-gradient(#0e0f12, rgba(14, 15, 18, 0.8)), url("../assets/img/ruinas.jpg") center 55% / cover no-repeat; }
+.jornada { position: relative; padding: 80px 0 40px;
+  background: url("../assets/img/ruinas.jpg") center 55% / cover no-repeat; }
+.jornada::before { content: ""; position: absolute; inset: 0; background-color: rgba(14, 15, 18, 0.8); }
+.jornada > .container { position: relative; z-index: 1; }
 .jornada h2 { text-align: center; font-size: 40px; margin-bottom: 50px; }
 .linha { position: relative; }
 .linha::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background-color: var(--terra); }
@@ -78,8 +78,8 @@ a { color: inherit; text-decoration: none; }
 
 /* login e cadastro */
 .login-page .login, .cadastro-page .login { min-height: 100vh; padding: 110px 0 50px; }
-.login-page .login { background: linear-gradient(rgba(14, 15, 18, 0.35), rgba(14, 15, 18, 0.7)), url("../assets/img/arco.jpg") center / cover no-repeat; }
-.cadastro-page .login { background: linear-gradient(rgba(14, 15, 18, 0.35), rgba(14, 15, 18, 0.7)), url("../assets/img/terracos.jpg") center / cover no-repeat; }
+.login-page .login { background: url("../assets/img/arco.jpg") center / cover no-repeat; }
+.cadastro-page .login { background: url("../assets/img/terracos.jpg") center / cover no-repeat; }
 .card { max-width: 460px; margin: 0 auto; padding: 36px; background-color: rgba(22, 24, 29, 0.92); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 6px; }
 .card h2 { font-size: 32px; margin-bottom: 22px; }
 .campo { margin-bottom: 16px; }
