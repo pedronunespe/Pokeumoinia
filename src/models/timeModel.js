@@ -1,10 +1,10 @@
-// Arquivo: src/models/timeModel.js
-// Consultas da tabela timePokemon (até 6 Pokémon por jogo do usuário).
-// PORQUE: os times são a base do radar de status, da rosca de gerações e do tipo predominante.
+ 
+ 
+ 
 
 var database = require("../database/config");
 
-// Lista todas as posições ocupadas dos times de um usuário.
+ 
 function listar(idUsuario) {
     var instrucaoSql = `
         SELECT tp.fkUsuarioJogo, tp.posicao, tp.fkPokemon,
@@ -19,8 +19,8 @@ function listar(idUsuario) {
     return database.executar(instrucaoSql, [idUsuario]);
 }
 
-// Insere ou substitui o Pokémon de uma posição do time.
-// A PRIMARY KEY (fkUsuarioJogo, posicao) permite usar ON DUPLICATE KEY UPDATE.
+ 
+ 
 function salvar(idUsuarioJogo, posicao, idPokemon) {
     var instrucaoSql = `
         INSERT INTO timePokemon (fkUsuarioJogo, posicao, fkPokemon)
@@ -30,7 +30,7 @@ function salvar(idUsuarioJogo, posicao, idPokemon) {
     return database.executar(instrucaoSql, [idUsuarioJogo, posicao, idPokemon]);
 }
 
-// Remove uma posição do time, conferindo se o jogo pertence ao usuário logado.
+ 
 function remover(idUsuario, idUsuarioJogo, posicao) {
     var instrucaoSql = `
         DELETE tp FROM timePokemon tp

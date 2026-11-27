@@ -1,12 +1,12 @@
-// Arquivo: public/dashboard/pokemons.js
-// Controla o catálogo de Pokémon: carrega gerações/tipos, cadastra, edita e exclui.
-// PORQUE: esses dados alimentam os status, as cores dos tipos e a rosca de gerações da dashboard.
+ 
+ 
+ 
 
 document.addEventListener("DOMContentLoaded", function () {
     carregarPaginaPokemons();
 });
 
-// Carrega selects e tabela em paralelo.
+ 
 async function carregarPaginaPokemons() {
     try {
         await Promise.all([carregarGeraoes(), carregarTipos(), carregarPokemons()]);
@@ -15,7 +15,7 @@ async function carregarPaginaPokemons() {
     }
 }
 
-// A API devolve numero e regiao separados; aqui montamos o texto do select.
+ 
 async function carregarGeraoes() {
     var geracoes = await api("/catalogos/geracoes");
     var formatadas = [];
@@ -28,14 +28,14 @@ async function carregarGeraoes() {
     preencherSelect("pk_geracao", formatadas, "idGeracao", "rotulo", "Escolha a geração...");
 }
 
-// Preenche os dois selects de tipo.
+ 
 async function carregarTipos() {
     var tipos = await api("/catalogos/tipos");
     preencherSelect("pk_tipo1", tipos, "idTipo", "nome", "Escolha o tipo principal...");
     preencherSelect("pk_tipo2", tipos, "idTipo", "nome", "Nenhum (opcional)");
 }
 
-// Lista os Pokémon e monta a tabela com BST e botões de ação.
+ 
 async function carregarPokemons() {
     var pokemons = await api("/pokemons");
     var corpo = document.getElementById("corpo_pokemons");
@@ -69,7 +69,7 @@ async function carregarPokemons() {
         celulaAcoes.className = "acoes";
         var botaoEditar = null;
         var botaoExcluir = null;
-        // IIFE: com var, o closure capturaria sempre o último Pokémon da lista.
+         
         (function (pokemonDaLinha) {
             botaoEditar = document.createElement("button");
             botaoEditar.type = "button";
@@ -97,7 +97,7 @@ async function carregarPokemons() {
     }
 }
 
-// Cria (POST) ou atualiza (PUT), dependendo do id escondido no formulário.
+ 
 async function salvarPokemon() {
     var id = valor("pk_id");
     var tipoIds = [];
@@ -133,7 +133,7 @@ async function salvarPokemon() {
     }
 }
 
-// Coloca os dados de um Pokémon no formulário para edição.
+ 
 function preencherFormularioPokemon(pokemon) {
     document.getElementById("pk_id").value = pokemon.idPokemon;
     document.getElementById("pk_nome").value = pokemon.nome;
@@ -151,7 +151,7 @@ function preencherFormularioPokemon(pokemon) {
     document.getElementById("pk_nome").focus();
 }
 
-// Volta o formulário ao modo de cadastro.
+ 
 function limparFormularioPokemon() {
     var campos = ["pk_id", "pk_nome", "pk_tipo1", "pk_tipo2", "pk_ps", "pk_ataque",
         "pk_defesa", "pk_atqesp", "pk_defesp", "pk_velocidade"];
@@ -163,7 +163,7 @@ function limparFormularioPokemon() {
     document.getElementById("botao_salvar_pokemon").textContent = "Cadastrar Pokémon";
 }
 
-// Exclui um Pokémon. O model já libera time, tipos e favorito antes do DELETE.
+ 
 async function excluirPokemon(idPokemon, nome) {
     if (!confirm("Excluir " + nome + " do catálogo? Ele também será removido dos times.")) {
         return;

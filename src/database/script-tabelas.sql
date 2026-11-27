@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS pokeumonia;
 USE pokeumonia;
 
--- Login e cadastro
+ 
 CREATE TABLE usuario (
     idUsuario INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(40) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE usuario (
     dataCadastro DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Catálogos (dados fixos)
+ 
 CREATE TABLE geracao (
     idGeracao INT PRIMARY KEY AUTO_INCREMENT,
     numero TINYINT NOT NULL UNIQUE,
@@ -21,7 +21,7 @@ CREATE TABLE geracao (
 CREATE TABLE tipo (
     idTipo INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(20) NOT NULL UNIQUE,
-    cor CHAR(7) NOT NULL              -- cor do cartão "Tipo mais utilizado"
+    cor CHAR(7) NOT NULL               
 );
 
 CREATE TABLE jogo (
@@ -44,28 +44,28 @@ CREATE TABLE pokemon (
     FOREIGN KEY (fkGeracao) REFERENCES geracao (idGeracao)
 );
 
--- Um Pokémon tem 1 ou 2 tipos
+ 
 CREATE TABLE pokemonTipo (
     fkPokemon INT,
     fkTipo INT,
-    slot TINYINT NOT NULL,            -- 1 = tipo principal, 2 = secundário
+    slot TINYINT NOT NULL,             
     PRIMARY KEY (fkPokemon, fkTipo),
     FOREIGN KEY (fkPokemon) REFERENCES pokemon (idPokemon),
     FOREIGN KEY (fkTipo) REFERENCES tipo (idTipo)
 );
 
--- 1:1 com usuario: cada usuário tem um único perfil e cada perfil pertence a um único usuário
+ 
 CREATE TABLE perfilTreinador (
     fkUsuario INT PRIMARY KEY,
     apelido VARCHAR(30) NOT NULL,
-    anoInicio YEAR NOT NULL,          -- ano do primeiro contato com Pokémon (anos de jornada)
+    anoInicio YEAR NOT NULL,           
     fkPokemonFavorito INT,
     FOREIGN KEY (fkUsuario) REFERENCES usuario (idUsuario),
     FOREIGN KEY (fkPokemonFavorito) REFERENCES pokemon (idPokemon)
 );
 
--- Dados do usuário
--- Jogos que o usuário jogou, com a nota dada
+ 
+ 
 CREATE TABLE usuarioJogo (
     idUsuarioJogo INT PRIMARY KEY AUTO_INCREMENT,
     fkUsuario INT NOT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE usuarioJogo (
     FOREIGN KEY (fkJogo) REFERENCES jogo (idJogo)
 );
 
--- Horas jogadas em cada jogo, por ano (alimenta a "Linha do tempo" e as horas por jogo)
+ 
 CREATE TABLE registroHoras (
     idRegistro INT PRIMARY KEY AUTO_INCREMENT,
     fkUsuarioJogo INT NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE registroHoras (
     FOREIGN KEY (fkUsuarioJogo) REFERENCES usuarioJogo (idUsuarioJogo)
 );
 
--- Time de até 6 Pokémon em cada jogo
+ 
 CREATE TABLE timePokemon (
     fkUsuarioJogo INT,
     posicao TINYINT,

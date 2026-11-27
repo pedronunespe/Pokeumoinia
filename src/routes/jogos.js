@@ -1,12 +1,12 @@
-// Arquivo: src/routes/jogos.js
-// Rotas do catálogo de jogos, dos jogos da jornada e dos registros de horas.
+ 
+ 
 
 var express = require("express");
 var router = express.Router();
 
 var jogoController = require("../controllers/jogoController");
 
-// Catálogo global de jogos (cadastrar o jogo antes de adicioná-lo à jornada).
+ 
 router.get("/catalogo", function (req, res) {
     jogoController.listarCatalogo(req, res);
 });
@@ -14,7 +14,7 @@ router.post("/catalogo", function (req, res) {
     jogoController.criarCatalogo(req, res);
 });
 
-// Jogos vinculados ao usuário. O idUsuario vai na URL para evitar confiar no corpo da requisição.
+ 
 router.get("/usuario/:idUsuario", function (req, res) {
     jogoController.listarDoUsuario(req, res);
 });
@@ -28,7 +28,7 @@ router.delete("/usuario/:idUsuario/:idUsuarioJogo", function (req, res) {
     jogoController.removerDoUsuario(req, res);
 });
 
-// Horas jogadas por ano em cada jogo.
+ 
 router.get("/horas/:idUsuario", function (req, res) {
     jogoController.listarHoras(req, res);
 });

@@ -1,10 +1,10 @@
-// Arquivo: src/models/pokemonModel.js
-// Consultas de escrita e leitura do catálogo de Pokémon e dos seus tipos.
-// PORQUE: a dashboard precisa de Pokémon cadastrados para montar os times e calcular os gráficos.
+ 
+ 
+ 
 
 var database = require("../database/config");
 
-// Monta a consulta base. Se receber um id, filtra um único Pokémon.
+ 
 function montarConsulta(idPokemon) {
     var instrucaoSql = `
         SELECT p.idPokemon, p.nome,
@@ -20,7 +20,7 @@ function montarConsulta(idPokemon) {
     `;
 
     if (idPokemon !== undefined) {
-        // O "?" mantém o id como parâmetro seguro, nunca concatenado na SQL.
+         
         instrucaoSql += " WHERE p.idPokemon = ?";
     }
 
@@ -32,7 +32,7 @@ function montarConsulta(idPokemon) {
     return instrucaoSql;
 }
 
-// Transforma as colunas GROUP_CONCAT (texto separado por vírgula) em arrays para o front-end.
+ 
 function formatarLinhas(linhas) {
     var i = 0;
     for (i = 0; i < linhas.length; i++) {
@@ -52,23 +52,23 @@ function formatarLinhas(linhas) {
     return linhas;
 }
 
-// Lista todos os Pokémon do catálogo.
+ 
 function listar() {
     return database.executar(montarConsulta(), []).then(formatarLinhas);
 }
 
-// Busca um Pokémon específico (usado pelo formulário de edição).
+ 
 function buscar(idPokemon) {
     return database.executar(montarConsulta(idPokemon), [idPokemon]).then(formatarLinhas);
 }
 
-// Apaga os tipos antigos e grava os novos, na ordem de slot (1 = principal, 2 = secundário).
+ 
 function vincularTipos(idPokemon, tipoIds) {
     var sqlRemover = `DELETE FROM pokemonTipo WHERE fkPokemon = ?;`;
     var sqlInserir = `INSERT INTO pokemonTipo (fkPokemon, fkTipo, slot) VALUES (?, ?, ?);`;
 
     return database.executar(sqlRemover, [idPokemon]).then(function () {
-        // Encadeamos os INSERTs para não disparar várias conexões ao mesmo tempo.
+         
         var cadeia = Promise.resolve();
         var i = 0;
         for (i = 0; i < tipoIds.length; i++) {
@@ -82,7 +82,7 @@ function vincularTipos(idPokemon, tipoIds) {
     });
 }
 
-// Insere o Pokémon e, em seguida, os seus tipos.
+ 
 function criar(dados) {
     var instrucaoSql = `
         INSERT INTO pokemon
@@ -103,7 +103,7 @@ function criar(dados) {
     return database.executar(instrucaoSql, parametros).then(function (resultado) {
         var idPokemon = resultado.insertId;
 
-        // Como não usamos transação, se vincular os tipos falhar removemos o Pokémon criado.
+         
         return vincularTipos(idPokemon, dados.tipoIds).then(function () {
             return { idPokemon: idPokemon };
         }).catch(function (erro) {
@@ -113,7 +113,7 @@ function criar(dados) {
     });
 }
 
-// Atualiza os status/a geração e troca os tipos do Pokémon.
+ 
 function atualizar(idPokemon, dados) {
     var instrucaoSql = `
         UPDATE pokemon
@@ -140,9 +140,9 @@ function atualizar(idPokemon, dados) {
     });
 }
 
-// Exclui um Pokémon liberando antes as tabelas que apontam para ele.
+ 
 function excluir(idPokemon) {
-    // O schema não usa ON DELETE CASCADE, então a ordem dos DELETEs importa.
+     
     var passos = [
         { sql: `DELETE FROM timePokemon WHERE fkPokemon = ?;`, params: [idPokemon] },
         { sql: `DELETE FROM pokemonTipo WHERE fkPokemon = ?;`, params: [idPokemon] },

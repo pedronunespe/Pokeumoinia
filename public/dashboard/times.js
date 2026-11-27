@@ -1,6 +1,6 @@
-// Arquivo: public/dashboard/times.js
-// Controla a montagem dos times por jogo e por posição (1 a 6).
-// PORQUE: a dashboard usa essas posições para calcular status, tipos e gerações.
+ 
+ 
+ 
 
 document.addEventListener("DOMContentLoaded", function () {
     if (!idUsuarioLogado()) {
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     carregarPaginaTimes();
 });
 
-// Carrega jogos do usuário, Pokémon disponíveis e as posições já ocupadas.
+ 
 async function carregarPaginaTimes() {
     try {
         await Promise.all([carregarJogos(), carregarPokemons(), carregarTimes()]);
@@ -18,13 +18,13 @@ async function carregarPaginaTimes() {
     }
 }
 
-// Somente jogos já vinculados à jornada podem receber um time.
+ 
 async function carregarJogos() {
     var jogos = await api("/jogos/usuario/" + encodeURIComponent(idUsuarioLogado()));
     preencherSelect("time_jogo", jogos, "idUsuarioJogo", "nome", "Escolha um jogo...");
 }
 
-// Gera as seis posições do time.
+ 
 function carregarPosicoes() {
     var posicoes = [];
     for (var i = 1; i <= 6; i++) {
@@ -33,13 +33,13 @@ function carregarPosicoes() {
     preencherSelect("time_posicao", posicoes, "posicao", "rotulo", "Escolha a posição...");
 }
 
-// Carrega o catálogo de Pokémon para o select.
+ 
 async function carregarPokemons() {
     var pokemons = await api("/pokemons");
     preencherSelect("time_pokemon", pokemons, "idPokemon", "nome", "Escolha um Pokémon...");
 }
 
-// Lista as posições ocupadas dos times do usuário.
+ 
 async function carregarTimes() {
     var times = await api("/times/" + encodeURIComponent(idUsuarioLogado()));
     var corpo = document.getElementById("corpo_times");
@@ -60,7 +60,7 @@ async function carregarTimes() {
         var celulaAcoes = document.createElement("td");
         celulaAcoes.className = "acoes";
 
-        // Capturamos os ids desta linha para o botão de excluir.
+         
         (function (idUsuarioJogo, posicao, nomePokemon) {
             var botao = document.createElement("button");
             botao.type = "button";
@@ -80,7 +80,7 @@ async function carregarTimes() {
     }
 }
 
-// Insere ou substitui a posição escolhida.
+ 
 async function salvarTime() {
     try {
         await api("/times/" + encodeURIComponent(idUsuarioLogado()), {
@@ -98,7 +98,7 @@ async function salvarTime() {
     }
 }
 
-// Libera uma posição do time.
+ 
 async function removerTime(idUsuarioJogo, posicao, nomePokemon) {
     if (!confirm("Remover " + nomePokemon + " da posição " + posicao + "?")) {
         return;
@@ -114,5 +114,5 @@ async function removerTime(idUsuarioJogo, posicao, nomePokemon) {
     }
 }
 
-// As posições são fixas, então bastam chamar uma vez após o DOM existir.
+ 
 carregarPosicoes();

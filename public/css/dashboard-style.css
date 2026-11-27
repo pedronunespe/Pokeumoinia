@@ -1,37 +1,37 @@
-/* Pokeumonia: dashboard (usa também o styles.css) */
+ 
 .dashboard-page { background-color: #0b0b0c; }
 .dash { padding: 0; }
 .dash h1 { font-size: 42px; margin-bottom: 6px; }
 .sub { color: var(--mudo); margin-bottom: 24px; }
 
-/* grade de cartões: 4 colunas, cartões largos ocupam 2 */
+ 
 .grade { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: stretch; }
 .span2 { grid-column: span 2; }
 .card-dash { min-width: 0; padding: 20px; background-color: #131315; border-radius: 14px; display: flex; flex-direction: column; justify-content: space-between; }
 .card-dash h3 { font-size: 20px; margin-bottom: 14px; color: var(--suave); }
 
-/* indicadores */
+ 
 .kpi p { font-size: 14px; color: var(--suave); }
 .kpi strong { display: block; font-family: Georgia, serif; font-size: 52px; font-weight: normal; line-height: 1.15; }
 .kpi .unidade { font-size: 22px; color: var(--mudo); }
 .kpi small { font-size: 13px; color: var(--mudo); }
 .card-tipo p, #card_tipo p, #card_tipo small { color: inherit; }
 
-/* gráficos e lista */
+ 
 .area-grafico { position: relative; height: 300px; width: 100%; }
 .historico { list-style: none; max-height: 300px; overflow-y: auto; }
 .item { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #26262a; }
 .item span { color: var(--mudo); font-size: 14px; }
 .resumo { margin-top: 12px; color: var(--suave); font-size: 14px; }
 
-/* Em telas pequenas, os cards ocupam a largura toda. */
+ 
 @media (max-width: 800px) {
   .grade { grid-template-columns: 1fr; }
   .span2 { grid-column: auto; }
   .dash h1 { font-size: 32px; }
 }
 
-/* ---------- Layout com sidebar das páginas de configuração ---------- */
+ 
 .app-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); min-height: 100vh; }
 
 .sidebar {
@@ -92,19 +92,17 @@
   font-size: 14px;
 }
 .grade-form input:focus, .grade-form select:focus { outline: none; border-color: var(--terra); }
-.grade-form input[type="color"] { height: 40px; padding: 3px; }
 
 .botoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 .botao-pequeno { width: auto; margin-top: 0; padding: 10px 20px; }
 .botao-secundario { background-color: transparent; color: var(--texto); }
-/* ALTERAÇÃO: variantes transparentes mantêm o fundo limpo no hover (sem brilho e sem preenchimento). */
+ 
 .botao-secundario:hover { background-color: transparent; border-color: var(--texto); }
 .botao-perigo { border-color: #6a3a38; background-color: transparent; color: #ff8b7a; }
 .botao-perigo:hover { background-color: transparent; border-color: #ff4a33; }
 
 .aviso { display: none; margin-bottom: 16px; padding: 12px 14px; border-radius: 8px; font-size: 14px; }
 .aviso a { color: inherit; text-decoration: underline; }
-.cor-amostra { display: inline-block; width: 18px; height: 18px; border: 1px solid #4a4d57; border-radius: 4px; vertical-align: middle; }
 .aviso.sucesso { display: block; border: 1px solid #3e6b4a; background-color: #16261b; color: #9ee0ad; }
 .aviso.erro { display: block; border: 1px solid #6a3a38; background-color: #261616; color: #ff9b8b; }
 

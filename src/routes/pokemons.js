@@ -1,12 +1,12 @@
-// Arquivo: src/routes/pokemons.js
-// Rotas CRUD do catálogo de Pokémon (cadastro, edição, listagem e exclusão).
+ 
+ 
 
 var express = require("express");
 var router = express.Router();
 
 var pokemonController = require("../controllers/pokemonController");
 
-// Rotas específicas primeiro para não serem confundidas com /:idPokemon.
+ 
 router.get("/", function (req, res) {
     pokemonController.listar(req, res);
 });

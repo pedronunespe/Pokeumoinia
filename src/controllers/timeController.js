@@ -1,13 +1,13 @@
-// Arquivo: src/controllers/timeController.js
-// Regras para montar o time de até 6 Pokémon de cada jogo do usuário.
-// PORQUE: a dashboard calcula status, tipos e gerações a partir dessas posições ocupadas.
+ 
+ 
+ 
 
 var timeModel = require("../models/timeModel");
 var jogoModel = require("../models/jogoModel");
 var pokemonModel = require("../models/pokemonModel");
 var validacao = require("./validacao");
 
-// GET /times/:idUsuario
+ 
 async function listar(req, res) {
     try {
         var idUsuario = validacao.inteiro(req.params.idUsuario, "id do usuário", 1);
@@ -17,7 +17,7 @@ async function listar(req, res) {
     }
 }
 
-// POST /times/:idUsuario
+ 
 async function salvar(req, res) {
     try {
         var idUsuario = validacao.inteiro(req.params.idUsuario, "id do usuário", 1);
@@ -25,7 +25,7 @@ async function salvar(req, res) {
         var posicao = validacao.inteiro(req.body.posicao, "posição do time", 1, 6);
         var idPokemon = validacao.inteiro(req.body.idPokemon, "Pokémon", 1);
 
-        // Confere o dono do jogo e se o Pokémon existe antes de gravar.
+         
         var vinculo = await jogoModel.buscarUsuarioJogo(idUsuario, idUsuarioJogo);
         if (vinculo.length === 0) {
             return res.status(404).send("Jogo não encontrado na sua jornada.");
@@ -42,7 +42,7 @@ async function salvar(req, res) {
     }
 }
 
-// DELETE /times/:idUsuario/:idUsuarioJogo/:posicao
+ 
 async function remover(req, res) {
     try {
         var idUsuario = validacao.inteiro(req.params.idUsuario, "id do usuário", 1);

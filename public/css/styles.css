@@ -1,8 +1,8 @@
-/* Pokeumonia: estilos gerais (index, login, cadastro) */
-/* Remove margens e padding padrão e facilita o cálculo de tamanhos. */
+ 
+ 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Paleta de cores reutilizada nas folhas de estilo. */
+ 
 :root {
   --fundo: #0e0f12;
   --card: #16181d;
@@ -18,7 +18,7 @@ h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; font-weight: normal
 a { color: inherit; text-decoration: none; }
 .container { width: 90%; max-width: 1000px; margin: 0 auto; }
 
-/* navbar preta levemente transparente nas páginas iniciais */
+ 
 .header { position: absolute; top: 0; left: 0; width: 100%; z-index: 10; background-color: rgba(14, 15, 18, 0.85); }
 .header .container { display: flex; justify-content: space-between; align-items: center; height: 64px; }
 .logo { font-family: Georgia, serif; font-size: 20px; }
@@ -26,7 +26,7 @@ a { color: inherit; text-decoration: none; }
 .navbar a { color: var(--suave); }
 .navbar a:hover, .navbar .agora a { color: var(--texto); }
 
-/* página inicial: preenchimento uniforme e harmonioso da tela cheia, sem sobras desproporcionais */
+ 
 .home-page { min-height: 100vh; display: flex; flex-direction: column; }
 .home-page .capa {
   position: relative;
@@ -47,11 +47,11 @@ a { color: inherit; text-decoration: none; }
 }
 .capa h1 { font-size: 60px; max-width: 760px; margin-bottom: 20px; line-height: 1.18; }
 .capa p { font-family: Georgia, serif; font-style: italic; font-size: 22px; max-width: 680px; line-height: 1.5; }
-/* Sombra para destacar as letras e garantir leitura nítida sobre o fundo. */
+ 
 .capa h1, .capa p { text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9); }
 .capa .botao { display: inline-block; width: auto; margin-top: 28px; padding: 14px 34px; }
 
-/* jornada */
+ 
 .jornada { position: relative; padding: 80px 0 40px;
   background: url("../assets/img/ruinas.jpg") center 55% / cover no-repeat; }
 .jornada::before { content: ""; position: absolute; inset: 0; background-color: rgba(14, 15, 18, 0.8); }
@@ -72,11 +72,11 @@ a { color: inherit; text-decoration: none; }
 .foto { height: 230px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 4px; color: var(--mudo); }
 .foto img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ALTERAÇÃO: ajustes da nova página jornada.html. PORQUE: o cabeçalho fixo ocupa o topo e a página precisa de respiro. */
+ 
 .jornada-page .jornada { min-height: 100vh; padding: 140px 0 80px; }
 .jornada-intro { max-width: 620px; margin: -36px auto 46px; text-align: center; color: var(--suave); font-family: Georgia, serif; font-style: italic; }
 
-/* login e cadastro */
+ 
 .login-page .login, .cadastro-page .login { min-height: 100vh; padding: 110px 0 50px; }
 .login-page .login { background: url("../assets/img/arco.jpg") center / cover no-repeat; }
 .cadastro-page .login { background: url("../assets/img/terracos.jpg") center / cover no-repeat; }
@@ -88,7 +88,7 @@ input { width: 100%; padding: 10px 0; background-color: transparent; border: 0; 
 input:focus { outline: none; border-bottom-color: var(--texto); }
 #requisitos_senha { font-size: 13px; margin-top: 6px; }
 .botao { width: 100%; margin-top: 10px; padding: 12px; border: 1px solid var(--texto); border-radius: 30px; background-color: var(--texto); color: var(--fundo); font-size: 16px; cursor: pointer; }
-/* ALTERAÇÃO: brilho removido do botão. PORQUE: o hover deve ser discreto, sem luz ao redor. */
+ 
 .botao:hover { background-color: #ded8cc; border-color: #ded8cc; }
 .troca { margin-top: 20px; font-size: 14px; color: var(--mudo); }
 .troca a { color: var(--texto); text-decoration: underline; }
@@ -98,11 +98,11 @@ input:focus { outline: none; border-bottom-color: var(--texto); }
 .loading-div img { width: 50px; height: 50px; }
 #div_erros_login { display: none; }
 
-/* rodapé */
+ 
 .footer { padding: 30px 0; text-align: center; font-size: 14px; color: var(--mudo); background-color: var(--fundo); }
 
-/* celular */
-/* Ajusta os tamanhos e empilha os marcos em telas pequenas. */
+ 
+ 
 @media (max-width: 800px) {
   .home-page .capa { padding: 90px 0 50px; align-items: center; }
   .capa h1 { font-size: 38px; }

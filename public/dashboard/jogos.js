@@ -1,6 +1,6 @@
-// Arquivo: public/dashboard/jogos.js
-// Controla a página de jogos: catálogo, vínculo com a jornada, notas e horas por ano.
-// PORQUE: cada alteração aqui alimenta diretamente os gráficos da dashboard.
+ 
+ 
+ 
 
 document.addEventListener("DOMContentLoaded", function () {
     if (!idUsuarioLogado()) {
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     carregarPaginaJogos();
 });
 
-// Carrega as três listas usadas na página.
+ 
 async function carregarPaginaJogos() {
     try {
         await Promise.all([carregarCatalogo(), carregarMeusJogos(), carregarHoras()]);
@@ -18,13 +18,13 @@ async function carregarPaginaJogos() {
     }
 }
 
-// Preenche o select de jogos disponíveis para adicionar à jornada.
+ 
 async function carregarCatalogo() {
     var jogos = await api("/jogos/catalogo");
     preencherSelect("jogo_catalogo", jogos, "idJogo", "nome", "Escolha um jogo...");
 }
 
-// Preenche a tabela de jogos do usuário e o select usado no formulário de horas.
+ 
 async function carregarMeusJogos() {
     var jogos = await api("/jogos/usuario/" + encodeURIComponent(idUsuarioLogado()));
     preencherSelect("hora_jogo", jogos, "idUsuarioJogo", "nome", "Escolha um jogo...");
@@ -54,7 +54,7 @@ async function carregarMeusJogos() {
 
         var celulaAcoes = document.createElement("td");
         celulaAcoes.className = "acoes";
-        // IIFE guarda os valores desta linha; sem isso os botões usariam sempre o último jogo.
+         
         (function (idUsuarioJogo, nota) {
             celulaAcoes.appendChild(criarBotao("Nota", function () {
                 editarNota(idUsuarioJogo, nota);
@@ -72,7 +72,7 @@ async function carregarMeusJogos() {
     }
 }
 
-// Preenche a tabela de horas por ano.
+ 
 async function carregarHoras() {
     var registros = await api("/jogos/horas/" + encodeURIComponent(idUsuarioLogado()));
     var corpo = document.getElementById("corpo_horas");
@@ -95,7 +95,7 @@ async function carregarHoras() {
 
         var celulaAcoes = document.createElement("td");
         celulaAcoes.className = "acoes";
-        // Mesma proteção do loop de jogos: capturamos os valores primitivos da linha.
+         
         (function (idRegistro, ano, horas) {
             celulaAcoes.appendChild(criarBotao("Editar", function () {
                 editarHora(idRegistro, ano, horas);
@@ -113,7 +113,7 @@ async function carregarHoras() {
     }
 }
 
-// Cria um botão de ação da tabela com a classe e o clique informados.
+ 
 function criarBotao(rotulo, acao, classeExtra) {
     var botao = document.createElement("button");
     botao.type = "button";
@@ -125,7 +125,7 @@ function criarBotao(rotulo, acao, classeExtra) {
     return botao;
 }
 
-// Cadastra um jogo novo no catálogo global.
+ 
 async function cadastrarJogoCatalogo() {
     try {
         await api("/jogos/catalogo", {
@@ -146,7 +146,7 @@ async function cadastrarJogoCatalogo() {
     }
 }
 
-// Vincula ao usuário um jogo que já está no catálogo.
+ 
 async function adicionarJogoUsuario() {
     try {
         await api("/jogos/usuario/" + encodeURIComponent(idUsuarioLogado()), {
@@ -164,7 +164,7 @@ async function adicionarJogoUsuario() {
     }
 }
 
-// Usa prompt para editar a nota (mantém o projeto simples, sem modal próprio).
+ 
 async function editarNota(idUsuarioJogo, notaAtual) {
     var novaNota = prompt("Nova nota de 0 a 10 (deixe em branco para remover):", notaAtual === null ? "" : notaAtual);
     if (novaNota === null) {
@@ -182,7 +182,7 @@ async function editarNota(idUsuarioJogo, notaAtual) {
     }
 }
 
-// Remove o vínculo do jogo com o usuário (o model apaga horas e time antes).
+ 
 async function removerJogoUsuario(idUsuarioJogo) {
     if (!confirm("Remover este jogo? Horas e time vinculados também serão apagados.")) {
         return;
@@ -199,7 +199,7 @@ async function removerJogoUsuario(idUsuarioJogo) {
     }
 }
 
-// Insere ou atualiza horas (a API usa UPSERT pela chave jogo + ano).
+ 
 async function salvarHora() {
     try {
         await api("/jogos/horas/" + encodeURIComponent(idUsuarioLogado()), {
@@ -219,7 +219,7 @@ async function salvarHora() {
     }
 }
 
-// Edita ano e horas de um registro específico.
+ 
 async function editarHora(idRegistro, anoAtual, horasAtual) {
     var novoAno = prompt("Ano:", anoAtual);
     if (novoAno === null) {
@@ -242,7 +242,7 @@ async function editarHora(idRegistro, anoAtual, horasAtual) {
     }
 }
 
-// Exclui um registro de horas.
+ 
 async function removerHora(idRegistro) {
     if (!confirm("Excluir este registro de horas?")) {
         return;

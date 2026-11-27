@@ -1,12 +1,12 @@
--- Arquivo: src/database/script-semeada.sql
--- Dados mínimos de catálogo para os formulários da dashboard funcionarem.
--- PORQUE: sem gerações, tipos e jogos cadastrados, os selects ficam vazios e nenhum cadastro é possível.
--- Execute este script no banco pokeumonia depois de script-tabelas.sql.
--- O INSERT IGNORE permite rodá-lo mais de uma vez sem duplicar registros.
+ 
+ 
+ 
+ 
+ 
 
 USE pokeumonia;
 
--- Gerações principais até Paldea.
+ 
 INSERT IGNORE INTO geracao (numero, regiao) VALUES
     (1, 'Kanto'),
     (2, 'Johto'),
@@ -18,7 +18,7 @@ INSERT IGNORE INTO geracao (numero, regiao) VALUES
     (8, 'Galar'),
     (9, 'Paldea');
 
--- Tipos e as cores usadas nos cartões e gráficos da dashboard.
+ 
 INSERT IGNORE INTO tipo (nome, cor) VALUES
     ('Normal', '#a8a878'),
     ('Fogo', '#f08030'),
@@ -39,7 +39,7 @@ INSERT IGNORE INTO tipo (nome, cor) VALUES
     ('Aço', '#b8b8d0'),
     ('Fada', '#ee99ac');
 
--- Jogos citados na jornada do projeto, já disponíveis para vincular ao usuário.
+ 
 INSERT IGNORE INTO jogo (nome, plataforma, anoLancamento) VALUES
     ('Black & White', 'Nintendo DS', 2010),
     ('X & Y', 'Nintendo 3DS', 2013),

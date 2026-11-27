@@ -1,7 +1,7 @@
-// Model com os comandos SQL das empresas.
+ 
 var empresaModel = require("../models/empresaModel");
 
-// Busca uma empresa pelo CNPJ enviado na query string.
+ 
 function buscarPorCnpj(req, res) {
   var cnpj = req.query.cnpj;
 
@@ -10,14 +10,14 @@ function buscarPorCnpj(req, res) {
   });
 }
 
-// Lista todas as empresas cadastradas.
+ 
 function listar(req, res) {
   empresaModel.listar().then((resultado) => {
     res.status(200).json(resultado);
   });
 }
 
-// Busca uma empresa pelo id informado na URL.
+ 
 function buscarPorId(req, res) {
   var id = req.params.id;
 
@@ -26,7 +26,7 @@ function buscarPorId(req, res) {
   });
 }
 
-// Cadastra a empresa apenas se o CNPJ ainda não estiver em uso.
+ 
 function cadastrar(req, res) {
   var cnpj = req.body.cnpj;
   var razaoSocial = req.body.razaoSocial;
@@ -44,7 +44,7 @@ function cadastrar(req, res) {
   });
 }
 
-// Exporta as funções usadas pelo roteador de empresas.
+ 
 module.exports = {
   buscarPorCnpj,
   buscarPorId,

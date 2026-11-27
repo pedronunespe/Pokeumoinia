@@ -10,12 +10,12 @@
 </head>
 
 <body class="cadastro-page">
-    <!-- Cabeçalho com o logo e os links de navegação. -->
+    
     <div class="header">
         <div class="container">
             <a class="logo" href="index.html">Pokeumonia</a>
             <ul class="navbar">
-                <!-- ALTERAÇÃO: link da jornada também disponível no cadastro. PORQUE: a navbar deve ser consistente entre as páginas públicas. -->
+                
                 <li><a href="jornada.html">Minha jornada</a></li>
                 <li class="agora"><a href="cadastro.html">Cadastro</a></li>
                 <li><a href="login.html">Login</a></li>
@@ -23,9 +23,9 @@
         </div>
     </div>
 
-    <!-- Área do formulário de cadastro. -->
+    
     <div class="login">
-        <!-- Mensagem de erro ou de sucesso do cadastro. -->
+        
         <div class="alerta_erro">
             <div class="card_erro" id="cardErro">
                 <span id="mensagem_erro"></span>
@@ -34,7 +34,7 @@
         <div class="container">
             <div class="card">
                 <h2>Crie sua conta</h2>
-                <!-- Campos pessoais, senha e botão de cadastro. -->
+                
                 <div class="formulario">
                     <div class="campo">
                         <span>Nome:</span>
@@ -51,7 +51,7 @@
                     <div class="campo">
                         <span>Senha:</span>
                         <input id="senha_input" type="password" placeholder="******" oninput="mostrarRequisitosSenha()" />
-                        <!-- Checklist atualizado a cada caractere digitado na senha. -->
+                        
                         <div id="requisitos_senha"></div>
                     </div>
                     <div class="campo">
@@ -60,7 +60,7 @@
                     </div>
                     <button class="botao" onclick="cadastrar()">Cadastrar</button>
                 </div>
-                <!-- Animação mostrada enquanto a requisição está em andamento. -->
+                
                 <div id="div_aguardar" class="loading-div">
                     <img src="./assets/circle-loading.gif" id="loading-gif" />
                 </div>
@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    <!-- Rodapé com os créditos do projeto. -->
+    
     <div class="footer">
         <div class="container">
             Projeto acadêmico. Pokémon é marca da Nintendo, Game Freak e The Pokémon Company. Artista @Rival.clay
@@ -82,7 +82,7 @@
 </html>
 
 <script>
-    // ALTERAÇÃO: validação de e-mail igual à do controller. PORQUE: cliente e servidor devem aceitar os mesmos e-mails.
+     
     function validarEmail(email) {
         if (typeof email !== "string") {
             return { valido: false, erros: ["O e-mail deve ser um texto."] };
@@ -138,7 +138,7 @@
         return { valido: erros.length === 0, erros: erros };
     }
 
-    // ALTERAÇÃO: validação de senha igual à do controller, com vetores NUMEROS e MAIUSCULAS. PORQUE: evita divergência entre formulário e API.
+     
     function validarSenha(senha) {
         if (typeof senha !== "string") {
             return { valido: false, erros: ["A senha deve ser um texto."] };
@@ -178,13 +178,13 @@
         return { valido: erros.length === 0, erros: erros };
     }
 
-    // Exibe uma mensagem no card de aviso do formulário.
+     
     function mostrarErroCadastro(mensagem) {
         cardErro.style.display = "block";
         mensagem_erro.textContent = mensagem;
     }
 
-    // Zera todos os campos após um cadastro bem-sucedido.
+     
     function limparFormulario() {
         document.getElementById("nome_input").value = "";
         document.getElementById("sobrenome_input").value = "";
@@ -193,7 +193,7 @@
         document.getElementById("confirmacao_senha_input").value = "";
     }
 
-    // ALTERAÇÃO: checklist substituído por validarSenha e percorrido com while. PORQUE: mostra apenas os requisitos que faltam.
+     
     function mostrarRequisitosSenha() {
         var erros = validarSenha(senha_input.value).erros;
         var html = "";
@@ -207,11 +207,11 @@
         requisitos_senha.innerHTML = html;
     }
 
-    // Valida o formulário e envia os dados para cadastrar o usuário.
+     
     async function cadastrar() {
         aguardar();
 
-        // ALTERAÇÃO: leitura dos campos sem trim. PORQUE: a validação de e-mail detecta espaços sem remover caracteres.
+         
         var nomeVar = nome_input.value;
         var sobrenomeVar = sobrenome_input.value;
         var emailVar = email_input.value;
@@ -230,7 +230,7 @@
             return false;
         }
 
-        // ALTERAÇÃO: validações de e-mail e senha substituídas por validarEmail e validarSenha. PORQUE: replica as regras do servidor.
+         
         var resultadoEmail = validarEmail(emailVar);
         var resultadoSenha = validarSenha(senhaVar);
         if (!resultadoEmail.valido) {
@@ -253,17 +253,17 @@
             return false;
         }
 
-        // Agenda para esconder a mensagem exibida após a validação.
+         
         setInterval(sumirMensagem, 5000);
 
         try {
-            // Envia os dados do formulário para a API de cadastro.
+             
             var resposta = await fetch("/usuarios/cadastrar", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                // ALTERAÇÃO: corpo enviado sem o vínculo de empresa. PORQUE: o banco pokeumonia não possui estabelecimento.
+                 
                 body: JSON.stringify({
                     nomeServer: nomeVar,
                     sobrenomeServer: sobrenomeVar,
@@ -272,32 +272,32 @@
                 }),
             });
 
-            // Se a API recusar o cadastro, exibe o erro recebido.
+             
             if (!resposta.ok) {
                 throw new Error("Houve um erro ao tentar realizar o cadastro.");
             }
 
-            // Sucesso: avisa o usuário e limpa os campos.
+             
             mostrarErroCadastro("Cadastro realizado com sucesso! Redirecionando para tela de Login...");
 
-            // Após 2 segundos, abre a tela de login.
+             
             setTimeout(function () {
                 window.location = "login.html";
             }, 2000);
 
             limparFormulario();
         } catch (erro) {
-            // Falha na requisição ou nos dados enviados.
+             
             mostrarErroCadastro(erro.message || "Não foi possível realizar o cadastro. Tente novamente.");
         } finally {
-            // Sempre esconde o carregamento ao terminar.
+             
             finalizarAguardar();
         }
 
         return false;
     }
 
-    // Esconde o card de aviso.
+     
     function sumirMensagem() {
         cardErro.style.display = "none";
     }

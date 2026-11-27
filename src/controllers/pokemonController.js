@@ -1,11 +1,11 @@
-// Arquivo: src/controllers/pokemonController.js
-// Regras do cadastro de Pokémon: valida status, geração e os 1 ou 2 tipos escolhidos.
-// PORQUE: um Pokémon inválido quebraria os cálculos de BST, radar e afinidade da dashboard.
+ 
+ 
+ 
 
 var pokemonModel = require("../models/pokemonModel");
 var validacao = require("./validacao");
 
-// Reúne as regras comuns de criação e edição em um único lugar.
+ 
 function validarDados(body) {
     var tipoIdsBrutos = body.tipoIds;
 
@@ -22,7 +22,7 @@ function validarDados(body) {
         throw validacao.falha("O tipo secundário deve ser diferente do principal.");
     }
 
-    // Os status base aceitos vão de 1 a 255 (faixa usada nos jogos oficiais).
+     
     return {
         nome: validacao.texto(body.nome, "nome do Pokémon", 40),
         idGeracao: validacao.inteiro(body.idGeracao, "geração", 1),
@@ -36,7 +36,7 @@ function validarDados(body) {
     };
 }
 
-// GET /pokemons
+ 
 async function listar(req, res) {
     try {
         return res.status(200).json(await pokemonModel.listar());
@@ -45,7 +45,7 @@ async function listar(req, res) {
     }
 }
 
-// GET /pokemons/:idPokemon
+ 
 async function buscar(req, res) {
     try {
         var idPokemon = validacao.inteiro(req.params.idPokemon, "id do Pokémon", 1);
@@ -59,7 +59,7 @@ async function buscar(req, res) {
     }
 }
 
-// POST /pokemons
+ 
 async function criar(req, res) {
     try {
         var dados = validarDados(req.body);
@@ -70,7 +70,7 @@ async function criar(req, res) {
     }
 }
 
-// PUT /pokemons/:idPokemon
+ 
 async function atualizar(req, res) {
     try {
         var idPokemon = validacao.inteiro(req.params.idPokemon, "id do Pokémon", 1);
@@ -87,7 +87,7 @@ async function atualizar(req, res) {
     }
 }
 
-// DELETE /pokemons/:idPokemon
+ 
 async function excluir(req, res) {
     try {
         var idPokemon = validacao.inteiro(req.params.idPokemon, "id do Pokémon", 1);

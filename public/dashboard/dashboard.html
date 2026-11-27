@@ -7,7 +7,7 @@
     <title>Pokeumonia | Dashboard</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/dashboard-style.css">
-    <!-- ALTERAÇÃO: sessão, utilitários de API e sidebar passaram a ser scripts compartilhados. PORQUE: todas as páginas da área logada usam o mesmo menu. -->
+    
     <script src="../js/sessao.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/layout.js"></script>
@@ -16,7 +16,7 @@
 
 <body class="dashboard-page" onload="montarSidebar('dashboard.html'); validarSessao(); inicializarDashboard()">
 
-    <!-- ALTERAÇÃO: layout em duas colunas com a sidebar de navegação. PORQUE: a dashboard agora tem páginas de cadastro e configuração. -->
+    
     <div class="app-layout">
         <aside class="sidebar" id="app_sidebar"></aside>
 
@@ -31,11 +31,11 @@
                 </div>
             </div>
 
-            <!-- Aviso de erro/estado vazio, preenchido por dashboard.js. -->
+            
             <div class="aviso" id="mensagem_dashboard"></div>
             <div class="aviso" id="estado_vazio">Ainda não há jogos ou horas cadastrados. Comece em <a href="jogos.html">Jogos</a> para popular a dashboard.</div>
 
-            <!-- Grade de cards: KPIs, gráficos e listas. -->
+            
             <div class="grade">
                 <div class="card-dash kpi">
                     <p>Horas totais</p>
@@ -83,7 +83,7 @@
                 </div>
             </div>
 
-    <!-- ALTERAÇÃO: os dados de exemplo embutidos foram substituídos pelo script que consome a API. PORQUE: a dashboard agora é dinâmica. -->
+    
     <script src="dashboard.js"></script>
 </body>
 

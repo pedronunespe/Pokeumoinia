@@ -1,7 +1,7 @@
-// ALTERAÇÃO: model de aquários removido. PORQUE: a tabela de aquários não existe no banco pokeumonia.
+ 
 var usuarioModel = require("../models/usuarioModel");
 
-// ALTERAÇÃO: validação de e-mail espelhada no cadastro.html. PORQUE: o servidor deve rejeitar e-mails inválidos mesmo se o cliente for burlado.
+ 
 function validarEmail(email) {
     if (typeof email !== "string") {
         return { valido: false, erros: ["O e-mail deve ser um texto."] };
@@ -57,7 +57,7 @@ function validarEmail(email) {
     return { valido: erros.length === 0, erros: erros };
 }
 
-// ALTERAÇÃO: validação de senha espelhada no cadastro.html, usando vetores de números e maiúsculas. PORQUE: mantém a mesma regra no cliente e no servidor.
+ 
 function validarSenha(senha) {
     if (typeof senha !== "string") {
         return { valido: false, erros: ["A senha deve ser um texto."] };
@@ -97,12 +97,12 @@ function validarSenha(senha) {
     return { valido: erros.length === 0, erros: erros };
 }
 
-// Valida e-mail e senha e devolve os dados do usuário após o login.
+ 
 async function autenticar(req, res) {
     var email = req.body.emailServer;
     var senha = req.body.senhaServer;
 
-    // ALTERAÇÃO: validação no servidor usa validarEmail e validarSenha. PORQUE: centraliza as regras e não depende do navegador.
+     
     if (typeof email !== "string") {
         return res.status(400).send("Informe um e-mail válido.");
     }
@@ -119,45 +119,45 @@ async function autenticar(req, res) {
     }
 
     try {
-        // Consulta o banco pelo e-mail e senha informados.
+         
         var resultadoAutenticar = await usuarioModel.autenticar(email, senha);
 
-        // Nenhum usuário encontrado: credenciais inválidas.
+         
         if (resultadoAutenticar.length === 0) {
             return res.status(403).send("E-mail ou senha inválidos.");
         }
-        // Mais de um usuário com as mesmas credenciais: não é possível entrar.
+         
         if (resultadoAutenticar.length > 1) {
             return res.status(403).send("Há mais de um usuário com esse e-mail e senha.");
         }
 
         var usuario = resultadoAutenticar[0];
 
-        // ALTERAÇÃO: login devolve somente id, email e nome, com id vindo de idUsuario. PORQUE: o front-end usa idUsuario na sessão e aquários não existem mais.
+         
         return res.status(200).json({
             id: usuario.idUsuario,
             email: usuario.email,
             nome: usuario.nome
         });
     } catch (erro) {
-        // Erro inesperado ao validar o login.
+         
         console.error("Houve um erro ao realizar o login:", erro.sqlMessage || erro.message || erro);
         return res.status(500).send("Não foi possível validar o login. Verifique a conexão e a estrutura do banco de dados.");
     }
 }
 
-// Cadastra um novo usuário com os dados enviados pelo formulário.
+ 
 function cadastrar(req, res) {
     var nome = req.body.nomeServer;
     var sobrenome = req.body.sobrenomeServer;
     var email = req.body.emailServer;
     var senha = req.body.senhaServer;
 
-    // ALTERAÇÃO: validação de e-mail e senha no cadastro. PORQUE: o banco não aceita e-mail inválido e as regras devem coincidir com o formulário.
+     
     var resultadoEmail = validarEmail(email);
     var resultadoSenha = validarSenha(senha);
 
-    // Validação dos campos obrigatórios.
+     
     if (nome == undefined) {
         res.status(400).send("Seu nome está undefined!");
     }else if (sobrenome == undefined) {
@@ -167,7 +167,7 @@ function cadastrar(req, res) {
     }else if (!resultadoSenha.valido) {
         res.status(400).json(resultadoSenha.erros);
     }else {
-        // ALTERAÇÃO: cadastrar() encadeado com cadastrarPerfil(insertId, nome). PORQUE: todo usuário deve ter perfilTreinador 1:1.
+         
         usuarioModel.cadastrar(nome, sobrenome, email, senha)
             .then(function (resultado) {
                 return usuarioModel.cadastrarPerfil(resultado.insertId, nome);
@@ -177,7 +177,7 @@ function cadastrar(req, res) {
             })
             .catch(function (erro) {
                 console.error("Houve um erro ao realizar o cadastro:", erro.sqlMessage || erro.message || erro);
-                // ALTERAÇÃO: e-mail duplicado retorna 409. PORQUE: a coluna email é UNIQUE e o cliente precisa distinguir conflito de erro interno.
+                 
                 if (erro && erro.code === "ER_DUP_ENTRY") {
                     return res.status(409).send("E-mail já cadastrado.");
                 }
@@ -186,7 +186,7 @@ function cadastrar(req, res) {
     }
 }
 
-// Exporta as funções usadas pelo roteador de usuários.
+ 
 module.exports = {
     autenticar,
     cadastrar,
