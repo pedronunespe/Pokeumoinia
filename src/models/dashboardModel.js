@@ -16,7 +16,7 @@ function buscarDados(idUsuario) {
         FROM usuarioJogo uj
         JOIN jogo j ON j.idJogo = uj.fkJogo
         LEFT JOIN registroHoras rh ON rh.fkUsuarioJogo = uj.idUsuarioJogo
-        WHERE- uj.fkUsuario = ?
+        WHERE uj.fkUsuario = ?
         GROUP BY uj.idUsuarioJogo, j.nome, uj.nota
         ORDER BY j.nome;
     `;
